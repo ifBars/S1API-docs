@@ -11,7 +11,7 @@ This repository contains the official documentation for S1API, a Schedule One Mo
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (version 16 or higher)
+- [Node.js](https://nodejs.org/) (version 18 or higher)
 - [Git](https://git-scm.com/)
 
 ### Setup
@@ -94,8 +94,8 @@ Critical information
 
 1. All development happens on the `dev` branch
 2. Push changes to the `dev` branch to trigger the automatic build
-3. The CI/CD pipeline builds and deploys to the `main` branch
-4. GitHub Pages serves content from the `main` branch
+3. The CI/CD pipeline builds and deploys to the `prod` branch
+4. GitHub Pages serves content from the `prod` branch
 
 ## 👥 Contributing
 
@@ -124,10 +124,6 @@ We welcome contributions to improve the S1API documentation!
 - Include code examples where appropriate
 - Follow the existing document structure
 - Test all code snippets to ensure they work correctly
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🔗 Useful Links
 
