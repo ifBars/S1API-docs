@@ -7,6 +7,7 @@ export default defineConfig({
   appearance: 'dark',
   lastUpdated: true,
   srcDir: '.vitepress/docs',
+  base: '/S1API-Docs/',
   
   head: [
     ['link', { rel: 'icon', href: '/logo.png' }],
