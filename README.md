@@ -1,5 +1,7 @@
 # S1API Documentation
 
+[![Build & Push VitePress Site to prod branch](https://github.com/ifBars/S1API-docs/actions/workflows/deploy.yml/badge.svg)](https://github.com/ifBars/S1API-docs/actions/workflows/deploy.yml)
+
 This repository contains the documentation for S1API, a Schedule One Mono/Il2Cpp cross-compatibility layer. The documentation is built using [VitePress](https://vitepress.dev/).
 
 ## Contributing to Documentation
