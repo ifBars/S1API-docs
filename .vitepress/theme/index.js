@@ -2,7 +2,6 @@
 import { h } from 'vue'
 import DefaultTheme from 'vitepress/theme'
 import HomePage from './components/HomePage.vue'
-import CustomFooter from './components/CustomFooter.vue'
 import { useData, useRoute } from 'vitepress'
 
 // Import fonts (via CDN for simplicity)
@@ -42,6 +41,5 @@ export default {
   enhanceApp({ app }) {
     // Register global components
     app.component('HomePage', HomePage)
-    app.component('CustomFooter', CustomFooter)
   }
 }

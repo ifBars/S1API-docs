@@ -23,7 +23,6 @@
 <script setup>
 import HomeHero from './HomeHero.vue'
 import HomeFeatures from './HomeFeatures.vue'
-import CustomFooter from './CustomFooter.vue'
 </script>
 
 <style>

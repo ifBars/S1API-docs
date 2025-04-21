@@ -53,10 +53,29 @@ export default defineConfig({
         {
           text: 'API Reference',
           items: [
-            { text: 'Overview', link: '/api/' },
-            { text: 'Game Elements', link: '/api/game-elements' },
-            { text: 'Save/Load System', link: '/api/save-load' },
-            { text: 'Utility Functions', link: '/api/utilities' }
+            { text: 'Overview', link: '/api/' }
+          ]
+        },
+        {
+          text: 'Game Systems',
+          items: [
+            { text: 'Dead Drops', link: '/api/dead-drops/' },
+            { text: 'Game Time', link: '/api/game-time/' },
+            { text: 'Items', link: '/api/items/' },
+            { text: 'Leveling', link: '/api/leveling/' },
+            { text: 'Money', link: '/api/money/' },
+            { text: 'NPCs', link: '/api/npcs/' },
+            { text: 'Phone App', link: '/api/phone-app/' },
+            { text: 'Products', link: '/api/products/' },
+            { text: 'Quests', link: '/api/quests/' },
+            { text: 'Storages', link: '/api/storages/' }
+          ]
+        },
+        {
+          text: 'Utilities',
+          items: [
+            { text: 'Save/Load System', link: '/api/save-system/' },
+            { text: 'Internal Utilities', link: '/api/internal/' }
           ]
         }
       ],
