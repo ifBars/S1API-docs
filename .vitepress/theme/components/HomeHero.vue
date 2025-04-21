@@ -50,8 +50,6 @@
 {
     <span class="token keyword">protected override string</span> FirstName => <span class="token string">"John"</span>;
     <span class="token keyword">protected override string</span> LastName => <span class="token string">"Doe"</span>;
-    
-    [<span class="token class-name">SaveableField</span>(<span class="token string">"Intro"</span>)]
     <span class="token keyword">private bool</span> _hasIntroduced = <span class="token keyword">false</span>;
 
     <span class="token keyword">protected override void</span> <span class="token function">OnInitialized</span>()
