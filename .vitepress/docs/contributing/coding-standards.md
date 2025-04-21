@@ -51,7 +51,7 @@ public void DestroyGameWorld() { ... }
 ## Conditional Build Compilation
 
 * Use `#if (MONO)` and `#elif (IL2CPP)` for platform-specific logic.
-* Wrap and alias `using` statements to provide platform-agnostic support.
+* Wrap and alias `using` statements to provide platform-agonstic support.
 
 ## What **NOT** to Do
 
