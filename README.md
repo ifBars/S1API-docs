@@ -1,125 +1,136 @@
 # S1API Documentation
 
-[![Build & Push VitePress Site to prod branch](https://github.com/ifBars/S1API-docs/actions/workflows/deploy.yml/badge.svg)](https://github.com/ifBars/S1API-docs/actions/workflows/deploy.yml)
+[![Build Status](https://github.com/ifBars/S1API-docs/actions/workflows/deploy.yml/badge.svg)](https://github.com/ifBars/S1API-docs/actions/workflows/deploy.yml)
+[![pages-build-deployment](https://github.com/ifBars/S1API-docs/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/ifBars/S1API-docs/actions/workflows/pages/pages-build-deployment)
 
-This repository contains the documentation for S1API, a Schedule One Mono/Il2Cpp cross-compatibility layer. The documentation is built using [VitePress](https://vitepress.dev/).
+## 📚 Overview
 
-## Contributing to Documentation
+This repository contains the official documentation for S1API, a Schedule One Mono/Il2Cpp cross-compatibility layer. The documentation is built using [VitePress](https://vitepress.dev/), a modern static site generator powered by Vue.js.
 
-We welcome contributions to improve the S1API documentation! Follow these steps to get started:
+## 🚀 Quick Start
 
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (version 16 or higher)
 - [Git](https://git-scm.com/)
 
-### Getting Started
+### Setup
 
-1. **Clone the repository**
+```bash
+# Clone the repository
+git clone https://github.com/ifBars/S1API-docs.git
+cd S1API-docs
 
-   ```bash
-   git clone https://github.com/todo/S1API-docs.git
-   cd S1API-docs
-   ```
+# Install dependencies
+npm install
 
-2. **Install dependencies**
+# Start the development server
+npm run docs:dev
+```
 
-   ```bash
-   npm install
-   ```
+The development server will be available at `http://localhost:5173` (or another port if 5173 is in use).
 
-3. **Start the development server**
+## 🏗️ Project Structure
 
-   ```bash
-   npm run docs:dev
-   ```
+```
+S1API-docs/
+├── .vitepress/            # VitePress configuration
+│   ├── config.mjs         # Site configuration
+│   ├── theme/             # Custom theme components
+│   └── docs/              # Documentation content
+│       ├── guide/         # User guides and tutorials
+│       ├── api/           # API reference documentation
+│       └── public/        # Static assets (images, etc.)
+├── .github/workflows/     # GitHub Actions workflows
+└── package.json           # Project dependencies
+```
 
-   This will start a local development server at `http://localhost:5173` (or another port if 5173 is in use).
+## 📝 Writing Documentation
 
-### Documentation Structure
+Documentation files are written in Markdown (`.md`). VitePress enhances standard Markdown with:
 
-- `.vitepress/config.js` - VitePress configuration
-- `.vitepress/docs/` - Documentation content
-  - `guide/` - User guides and tutorials
-  - `api/` - API reference documentation
-  - `public/` - Images like the logo
-  - `contributing/` - Contribution guidelines
+### Front Matter
 
-### Editing Documentation
+```yaml
+---
+title: Page Title
+description: Page description for SEO
+---
+```
 
-Documentation files are written in Markdown format (`.md` files). You can edit these files with any text editor.
+### Code Blocks with Syntax Highlighting
 
-#### Markdown Features
+````markdown
+```csharp
+// C# code here with syntax highlighting
+var api = new S1API();
+api.Initialize();
+```
+````
 
-VitePress extends standard Markdown with additional features:
+### Custom Containers
 
-- **Front Matter**: Add YAML metadata at the top of the file:
-  ```yaml
-  ---
-  title: Page Title
-  description: Page description
-  ---
-  ```
+```markdown
+::: tip
+Helpful tips and information
+:::
 
-- **Code Blocks**: Syntax highlighting with language specification:
-  ```md
-  ```csharp
-  // C# code here
-  ```
-  ```
+::: warning
+Important warnings
+:::
 
-- **Custom Containers**: Create styled callouts:
-  ```md
-  ::: tip
-  This is a tip
-  :::
+::: danger
+Critical information
+:::
+```
 
-  ::: warning
-  This is a warning
-  :::
+### Internal Links
 
-  ::: danger
-  This is a dangerous warning
-  :::
-  ```
+```markdown
+[Getting Started Guide](/guide/getting-started)
+```
 
-- **Links**: Create internal links using relative paths:
-  ```md
-  [Getting Started](/guide/getting-started)
-  ```
+## 🔄 Development Workflow
 
-### Deployment Workflow
+1. All development happens on the `dev` branch
+2. Push changes to the `dev` branch to trigger the automatic build
+3. The CI/CD pipeline builds and deploys to the `main` branch
+4. GitHub Pages serves content from the `main` branch
 
-This repository uses an automated deployment workflow:
+## 👥 Contributing
 
-1. All development work happens on the `dev` branch
-2. When changes are pushed to `dev`, they are automatically:
-   - Pulled by the server
-   - Built into static HTML
-   - Deployed to the `main` branch
-3. GitHub Pages serves the content from the `main` branch
+We welcome contributions to improve the S1API documentation!
 
-As a contributor, you only need to focus on making changes to the `dev` branch. The build and deployment process is handled automatically.
+### Contribution Process
 
-### Submitting Changes
-
-1. Create a new branch from `dev`:
+1. Fork the repository and create a branch:
    ```bash
    git checkout dev
    git checkout -b feature/my-documentation-update
    ```
 
-2. Make your changes and commit them:
+2. Make your changes, commit, and push:
    ```bash
    git add .
    git commit -m "Add documentation for feature X"
-   ```
-
-3. Push your branch:
-   ```bash
    git push origin feature/my-documentation-update
    ```
 
-4. Create a pull request to merge into the `dev` branch on GitHub.
+3. Open a pull request against the `dev` branch
 
-Thank you for contributing to S1API!
+### Style Guide
+
+- Use clear, concise language
+- Include code examples where appropriate
+- Follow the existing document structure
+- Test all code snippets to ensure they work correctly
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🔗 Useful Links
+
+- [VitePress Documentation](https://vitepress.dev/)
+- [Markdown Guide](https://www.markdownguide.org/)
+- [Vue.js Documentation](https://vuejs.org/guide/introduction.html)
