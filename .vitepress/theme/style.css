@@ -1,0 +1,560 @@
+/**
+ * Custom S1API VitePress Theme
+ * Modern, robust, and unique styling
+ */
+
+:root {
+  /* Base colors */
+  --s1-c-primary: #3a86ff;
+  --s1-c-primary-light: #61a0ff;
+  --s1-c-primary-dark: #1c6be0;
+  
+  --s1-c-secondary: #8338ec;
+  --s1-c-secondary-light: #9a5cf7;
+  --s1-c-secondary-dark: #6a1fd4;
+  
+  --s1-c-accent: #ff006e;
+  --s1-c-accent-light: #ff3388;
+  --s1-c-accent-dark: #d40058;
+  
+  /* Gray scale */
+  --s1-c-gray-100: #f8f9fa;
+  --s1-c-gray-200: #e9ecef;
+  --s1-c-gray-300: #dee2e6;
+  --s1-c-gray-400: #ced4da;
+  --s1-c-gray-500: #adb5bd;
+  --s1-c-gray-600: #6c757d;
+  --s1-c-gray-700: #495057;
+  --s1-c-gray-800: #343a40;
+  --s1-c-gray-900: #212529;
+  
+  /* Light mode */
+  --s1-c-bg: #ffffff;
+  --s1-c-bg-alt: #f9f9f9;
+  --s1-c-bg-soft: #f1f5f9;
+  --s1-c-text-1: #213547;
+  --s1-c-text-2: #3c4859;
+  --s1-c-text-3: #64748b;
+  --s1-c-border: rgba(60, 60, 67, 0.12);
+  --s1-c-divider: rgba(60, 60, 67, 0.1);
+  
+  /* Other variables */
+  --s1-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --s1-font-family-mono: 'JetBrains Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+  --s1-border-radius: 8px;
+  --s1-transition-standard: all 0.25s ease;
+  
+  /* Override VitePress variables with our custom ones */
+  --vp-c-brand-1: var(--s1-c-primary);
+  --vp-c-brand-2: var(--s1-c-primary-light);
+  --vp-c-brand-3: var(--s1-c-primary-dark);
+  --vp-c-brand-soft: rgba(58, 134, 255, 0.14);
+  
+  --vp-c-tip-1: var(--s1-c-primary);
+  --vp-c-tip-2: var(--s1-c-primary-light);
+  --vp-c-tip-3: var(--s1-c-primary-dark);
+  --vp-c-tip-soft: rgba(58, 134, 255, 0.14);
+  
+  --vp-c-warning-1: #fb8c00;
+  --vp-c-warning-2: #e67e00;
+  --vp-c-warning-3: #d97706;
+  --vp-c-warning-soft: rgba(251, 140, 0, 0.14);
+  
+  --vp-c-danger-1: var(--s1-c-accent);
+  --vp-c-danger-2: var(--s1-c-accent-light);
+  --vp-c-danger-3: var(--s1-c-accent-dark);
+  --vp-c-danger-soft: rgba(255, 0, 110, 0.14);
+  
+  /* Font settings */
+  --vp-font-family-base: var(--s1-font-family);
+  --vp-font-family-mono: var(--s1-font-family-mono);
+  
+  /* Component customization */
+  --vp-button-brand-border: transparent;
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-bg: var(--s1-c-primary);
+  --vp-button-brand-hover-bg: var(--s1-c-primary-light);
+  --vp-button-brand-active-bg: var(--s1-c-primary-dark);
+  
+  /* Custom block */
+  --vp-custom-block-tip-border: transparent;
+  --vp-custom-block-tip-text: var(--s1-c-text-1);
+  --vp-custom-block-tip-bg: rgba(58, 134, 255, 0.1);
+  
+  /* Home hero */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(
+    120deg, 
+    var(--s1-c-primary) 30%, 
+    var(--s1-c-secondary) 70%
+  );
+  
+  --vp-home-hero-image-background-image: linear-gradient(
+    -45deg, 
+    var(--s1-c-secondary-light) 30%, 
+    var(--s1-c-primary-light) 70%
+  );
+  --vp-home-hero-image-filter: blur(40px);
+  
+  /* Code block */
+  --vp-code-block-bg: #f8f8f8;
+  --vp-code-line-highlight-color: rgba(58, 134, 255, 0.05);
+  --vp-code-tab-text-color: var(--s1-c-text-2);
+  --vp-code-tab-active-text-color: var(--s1-c-primary);
+  --vp-code-tab-hover-text-color: var(--s1-c-primary-light);
+  --vp-code-copy-code-bg: rgba(255, 255, 255, 0.05);
+  --vp-code-copy-code-hover-bg: rgba(255, 255, 255, 0.1);
+}
+
+/* Dark mode overrides */
+.dark {
+  --s1-c-bg: #0f172a;
+  --s1-c-bg-alt: #1a2234;
+  --s1-c-bg-soft: #1e293b;
+  --s1-c-text-1: #f8fafc;
+  --s1-c-text-2: #e2e8f0;
+  --s1-c-text-3: #cbd5e1;
+  --s1-c-border: rgba(200, 200, 255, 0.12);
+  --s1-c-divider: rgba(200, 200, 255, 0.1);
+  
+  --vp-c-bg: var(--s1-c-bg);
+  --vp-c-bg-alt: var(--s1-c-bg-alt);
+  --vp-c-bg-soft: var(--s1-c-bg-soft);
+  --vp-c-text-1: var(--s1-c-text-1);
+  --vp-c-text-2: var(--s1-c-text-2);
+  --vp-c-text-3: var(--s1-c-text-3);
+  --vp-c-border: var(--s1-c-border);
+  --vp-c-divider: var(--s1-c-divider);
+  
+  --vp-code-block-bg: rgba(0, 0, 0, 0.2);
+}
+
+/* Global styles */
+html {
+  font-family: var(--s1-font-family);
+  letter-spacing: -0.01em;
+  scroll-behavior: smooth;
+}
+
+body {
+  transition: var(--s1-transition-standard);
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* Fix for z-index issues */
+.VPContent {
+  position: relative;
+  z-index: 1;
+}
+
+/* Custom component styling */
+.VPNav {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  height: 64px !important;
+  position: relative;
+  z-index: 30;
+}
+
+.VPNavBar.has-sidebar .content {
+  background: transparent !important;
+}
+
+.VPNavBar .container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  max-width: 1280px !important;
+}
+
+/* Group logo, title, and search bar on the left */
+.VPNavBar .VPNavBarTitle,
+.VPNavBar .VPNavBarSearch {
+  margin-right: 16px !important;
+}
+
+.VPNavBar .VPNavBarTitle {
+  display: flex;
+  align-items: center;
+}
+
+/* Ensure the search bar is right next to the title/logo */
+.VPNavBar .VPNavBarSearch {
+  order: 2;
+  margin-left: 0 !important;
+}
+
+/* Prevent extra space between title and search bar */
+.VPNavBar .VPNavBarTitle + .VPNavBarSearch {
+  margin-left: 0 !important;
+}
+
+/* Keep nav links and other items to the right */
+.VPNavBar .VPNavBarMenu {
+  margin-left: auto !important;
+}
+
+.VPNavBar .title {
+  font-weight: 600;
+}
+
+.VPSidebar {
+  background: var(--s1-c-bg-alt) !important;
+  padding: 16px !important;
+  border-right: 1px solid var(--s1-c-border);
+  z-index: 20;
+  padding-top: 80px !important;
+}
+
+.VPNavBar {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100 !important;
+  background-color: var(--s1-c-bg) !important;
+  height: 64px !important;
+  border-bottom: 1px solid var(--s1-c-divider) !important;
+}
+
+.is-home .VPNavBar {
+  background-color: var(--s1-c-bg) !important;
+  border-bottom: 1px solid var(--s1-c-divider) !important;
+}
+
+.VPSidebar .nav-item.is-active > .nav-link {
+  border-left: 2px solid var(--s1-c-primary);
+  padding-left: 10px;
+  font-weight: 600;
+}
+
+.VPNavBarTitle .logo {
+  height: 30px !important;
+}
+
+.VPNavBarTitle {
+  height: 64px !important;
+}
+
+.VPDoc.has-aside .content-container {
+  max-width: 1080px !important;
+}
+
+/* Button styling */
+.VPButton {
+  border-radius: var(--s1-border-radius) !important;
+  font-weight: 600 !important;
+  transition: var(--s1-transition-standard) !important;
+  position: relative;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.VPButton.brand {
+  box-shadow: 0 4px 12px rgba(58, 134, 255, 0.3);
+}
+
+.VPButton.brand:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(58, 134, 255, 0.4);
+}
+
+/* Card component */
+.VPFeature {
+  border: 1px solid var(--s1-c-divider) !important;
+  border-radius: var(--s1-border-radius) !important;
+  transition: var(--s1-transition-standard) !important;
+  position: relative;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.VPFeature:hover {
+  border-color: var(--s1-c-primary) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+/* Code blocks */
+.vp-doc div[class*='language-'] {
+  border-radius: var(--s1-border-radius) !important;
+  margin: 24px 0 !important;
+}
+
+/* Fix for clickable elements */
+a, button, .VPLink, .link {
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+}
+
+a.VPButton, a.hero-button, a.cta-button, .external-link a {
+  cursor: pointer !important;
+  position: relative;
+  z-index: 10;
+  pointer-events: auto !important;
+}
+
+/* Mobile enhancements */
+@media (max-width: 768px) {
+  :root {
+    --vp-home-hero-image-filter: blur(30px);
+  }
+  
+  .VPFeature {
+    padding: 16px !important;
+  }
+  
+  .VPNav {
+    z-index: 50;
+  }
+}
+
+/* Home page hero image animation */
+.VPHero .image-bg {
+  animation: pulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--s1-c-bg-soft);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--s1-c-gray-400);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--s1-c-gray-500);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--s1-c-gray-700);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--s1-c-gray-600);
+}
+
+/* Home page layout */
+.custom-layout.is-home .VPHome {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+.custom-layout.is-home .VPContent {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+.custom-layout.is-home .VPContent.has-sidebar {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Ensure all links are clickable */
+.s1-home-page {
+  position: relative;
+  z-index: 5;
+}
+
+.s1-home-page a, 
+.s1-home-page button,
+.hero-button,
+.cta-button,
+.cta-link {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+/* Fix for nav menu in mobile */
+.VPNavScreenMenu {
+  position: relative;
+  z-index: 50;
+}
+
+/* Home page layout - completely hide default VitePress home components */
+.VPHomeHero,
+.VPHomeFeatures,
+.VPHome {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  z-index: -1 !important;
+}
+
+/* Properly display our custom home page */
+.custom-layout.is-home .VPContent {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+}
+
+.s1-home-page {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 5;
+  position: relative;
+  width: 100%;
+}
+
+.VPContent.is-home {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Additional home page fixes for better integration with default theme */
+.VPHome {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.VPHomeHero {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.VPHomeFeatures {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Ensure our custom home page is properly displayed */
+.custom-home {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  z-index: 5;
+}
+
+/* Fix for NavBar transparency on home page */
+.is-home .VPNav {
+  background-color: transparent !important;
+}
+
+/* Make sure the home page content is above any default theme elements */
+.VPContent-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100% !important;
+}
+
+.VPNavBar {
+  position: relative;
+  z-index: 10;
+}
+
+/* Fix for buttons to ensure they're clickable */
+.hero-button, 
+.cta-button, 
+.cta-link, 
+.feature-link {
+  position: relative;
+  z-index: 10;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+/* Critical fix to make the custom home page visible */
+.VPHome {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: auto !important;
+  height: auto !important;
+}
+
+/* Ensure our custom home page is completely visible */
+.s1-home-page.custom-home {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 10 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Make sure all components in the home page are visible */
+.s1-home-hero,
+.home-features,
+.cta-section,
+.hero-content,
+.hero-image,
+.features-grid,
+.footer-content {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: auto !important;
+  height: auto !important;
+}
+
+/* Force the VitePress container to full width on home page */
+.is-home .VPContent .container {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Reset any margins */
+.VPHome .VPHomeHero, 
+.VPHome .VPHomeFeatures {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Hide the default theme elements we're replacing */
+.is-home .VPHomeHero,
+.is-home .VPHomeFeatures {
+  display: none !important;
+}
+

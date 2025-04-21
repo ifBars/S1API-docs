@@ -1,0 +1,23 @@
+{
+  "name": "s1api-docs",
+  "version": "1.0.0",
+  "description": "Documentation for the S1API project - A Schedule One Mono / Il2Cpp Cross Compatibility Layer",
+  "main": "index.js",
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview",
+    "docs:serve": "vitepress serve"
+  },
+  "keywords": ["s1api", "docs", "schedule-one", "modding", "cross-compatibility"],
+  "author": "S1API Contributors",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "vitepress": "^1.6.3",
+    "vue": "^3.5.13",
+    "markdown-it": "^13.0.1",
+    "markdown-it-container": "^3.0.0",
+    "shiki": "^0.14.0"
+  }
+}
