@@ -12,62 +12,59 @@ using S1API.Quests;
 
 ### Quest
 
-Represents a quest in the game.
+Abstract base class for creating custom quests in the game.
 
 ```csharp
-public class Quest : SaveableBase
+public abstract class Quest : Saveable
 {
-    public string QuestID { get; }
+    protected abstract string Title { get; }
+    protected abstract string Description { get; }
+    protected virtual bool AutoBegin => true;
+    protected readonly QuestEntry[] QuestEntries;
+    protected virtual Sprite? QuestIcon => null;
+    
+    public void Begin();
+    public void Cancel();
+    public void Expire();
+    public void Fail();
+    public void Complete();
+    public void End();
+    
+    protected QuestEntry AddEntry(string title, Vector3? poiPosition = null);
+}
+```
+
+### QuestEntry
+
+Represents a single entry (task) within a quest.
+
+```csharp
+public class QuestEntry
+{
+    public event Action OnComplete;
+    
     public string Title { get; set; }
-    public string Description { get; set; }
-    public bool IsActive { get; }
-    public bool IsCompleted { get; }
-    public List<QuestObjective> Objectives { get; }
+    public Vector3 POIPosition { get; set; }
     
-    public Quest(string questID, string title, string description);
-    
-    public void Activate();
+    public void Begin();
     public void Complete();
-    public void Abandon();
-    public void AddObjective(QuestObjective objective);
-    public void SetReward(QuestReward reward);
+    public void SetState(QuestState questState);
 }
 ```
 
-### QuestObjective
+### QuestState
 
-Represents a single objective within a quest.
-
-```csharp
-public class QuestObjective : SaveableBase
-{
-    public string ObjectiveID { get; }
-    public string Description { get; set; }
-    public bool IsCompleted { get; }
-    public int CurrentProgress { get; }
-    public int RequiredProgress { get; }
-    
-    public QuestObjective(string objectiveID, string description, int requiredProgress = 1);
-    
-    public void IncrementProgress(int amount = 1);
-    public void SetProgress(int progress);
-    public void Complete();
-}
-```
-
-### QuestReward
-
-Defines the rewards given upon quest completion.
+Enum representing possible states for quests and quest entries.
 
 ```csharp
-public class QuestReward
+public enum QuestState
 {
-    public int Money { get; set; }
-    public int Experience { get; set; }
-    public List<ItemReward> Items { get; }
-    
-    public QuestReward();
-    public void AddItem(string itemID, int quantity = 1);
+    Inactive,
+    Active,
+    Completed,
+    Failed,
+    Expired,
+    Cancelled
 }
 ```
 
@@ -78,95 +75,117 @@ Static class for managing all quests in the game.
 ```csharp
 public static class QuestManager
 {
-    public static List<Quest> ActiveQuests { get; }
-    public static List<Quest> CompletedQuests { get; }
-    
-    public static void RegisterQuest(Quest quest);
-    public static void UnregisterQuest(Quest quest);
-    public static Quest GetQuest(string questID);
-    public static bool TryGetQuest(string questID, out Quest quest);
+    public static Quest CreateQuest<T>(string? guid = null) where T : Quest;
+    public static Quest CreateQuest(Type questType, string? guid = null);
 }
 ```
 
 ## Usage Examples
 
-### Creating a Basic Quest
+### Creating a Custom Quest
 
 ```csharp
-// Create a new quest
-var quest = new Quest("mymod.mainquest", "The Big Adventure", "Embark on an epic journey!");
+// Create a custom quest class
+public class MyCustomQuest : Quest
+{
+    protected override string Title => "The Big Adventure";
+    protected override string Description => "Embark on an epic journey!";
+    
+    // Optional: Override the auto-begin behavior
+    protected override bool AutoBegin => false;
+    
+    // Optional: Custom quest icon
+    protected override Sprite? QuestIcon => ImageUtils.LoadImage("icon.png");
+    
+    private QuestEntry? findArtifactEntry;
+    private QuestEntry? defeatGuardianEntry;
+    
+    protected override void OnCreated()
+    {
+        // Add quest entries (objectives)
+        findArtifactEntry = AddEntry("Find the ancient artifact", new Vector3(100, 0, 200));
+        defeatGuardianEntry = AddEntry("Defeat the guardian", new Vector3(150, 0, 250));
+        
+        // Setup entry completion events
+        findArtifactEntry.OnComplete += OnArtifactFound;
+    }
+    
+    private void OnArtifactFound()
+    {
+        // Activate the next entry
+        defeatGuardianEntry?.SetState(QuestState.Active);
+    }
+}
 
-// Add objectives
-var objective1 = new QuestObjective("mymod.mainquest.find", "Find the ancient artifact", 1);
-var objective2 = new QuestObjective("mymod.mainquest.defeat", "Defeat the guardian", 1);
-var objective3 = new QuestObjective("mymod.mainquest.return", "Return to the village elder", 1);
+// Create an instance of the quest
+var quest = QuestManager.CreateQuest<MyCustomQuest>();
 
-quest.AddObjective(objective1);
-quest.AddObjective(objective2);
-quest.AddObjective(objective3);
-
-// Set rewards
-var reward = new QuestReward();
-reward.Money = 500;
-reward.Experience = 1000;
-reward.AddItem("artifact.ancient", 1);
-reward.AddItem("potion.health", 5);
-
-quest.SetReward(reward);
-
-// Register the quest
-QuestManager.RegisterQuest(quest);
-
-// Activate the quest
-quest.Activate();
+// Begin the quest (if AutoBegin is false)
+quest.Begin();
 ```
 
-### Updating Quest Progress
+### More Complex Example
 
 ```csharp
-// Get a registered quest
-var quest = QuestManager.GetQuest("mymod.mainquest");
-
-// Get the first objective
-var objective = quest.Objectives[0];
-
-// Update progress
-objective.IncrementProgress();
-
-// Check if completed
-if (objective.IsCompleted)
+public class DeliveryQuest : Quest
 {
-    // Maybe trigger some event or notification
-    Debug.Log($"Objective completed: {objective.Description}");
+    protected override string Title => "Delivery Request";
+    protected override string Description => 
+        $"Deliver the requested product and collect payment from the drop.";
     
-    // Check if all objectives are complete
-    if (quest.Objectives.All(o => o.IsCompleted))
+    [SaveableField("OrderData")]
+    private OrderData _orderData = new();
+    
+    private QuestEntry? _deliveryEntry;
+    private QuestEntry? _rewardEntry;
+    
+    protected override void OnCreated()
     {
-        // Complete the quest
-        quest.Complete();
+        _deliveryEntry = AddEntry(
+            $"Deliver {_orderData.Amount}x {_orderData.Product?.Name}.",
+            _orderData.DeliveryLocation
+        );
+        
+        _rewardEntry = AddEntry(
+            $"Collect ${_orderData.Price:N0}.",
+            _orderData.RewardLocation
+        );
+        
+        // Initially set reward entry as inactive
+        _rewardEntry.SetState(QuestState.Inactive);
+    }
+    
+    public void CompleteDelivery()
+    {
+        _deliveryEntry?.Complete();
+        _rewardEntry?.SetState(QuestState.Active);
+    }
+    
+    public void CollectReward()
+    {
+        _rewardEntry?.Complete();
+        // Quest will auto-complete when all entries are completed
     }
 }
 ```
 
-## Events
+## Quest States
 
-The Quests API provides events to hook into quest state changes:
+Quests and quest entries can be in the following states:
 
-```csharp
-// Quest state changes
-QuestManager.OnQuestActivated += (quest) => { /* ... */ };
-QuestManager.OnQuestCompleted += (quest) => { /* ... */ };
-QuestManager.OnQuestAbandoned += (quest) => { /* ... */ };
-
-// Objective progress
-QuestManager.OnObjectiveProgressChanged += (objective, oldProgress, newProgress) => { /* ... */ };
-QuestManager.OnObjectiveCompleted += (objective) => { /* ... */ };
-```
+- **Inactive**: Not yet started
+- **Active**: Currently in progress
+- **Completed**: Successfully finished
+- **Failed**: Not completed successfully
+- **Expired**: Time ran out
+- **Cancelled**: Manually cancelled
 
 ## Best Practices
 
-1. Use unique, namespaced IDs for all quests and objectives
-2. Keep quest descriptions clear and concise
-3. Ensure objectives are achievable and have clear completion criteria
-4. Balance quest rewards appropriately
-5. Consider quest dependencies and prerequisites when designing multi-quest storylines 
+1. Create a custom class for each quest type that extends the `Quest` abstract class
+2. Override `Title` and `Description` properties to provide clear quest information
+3. Use `AddEntry` to create quest entries (objectives) with descriptive titles
+4. Use `POIPosition` to mark locations on the map for quest entries
+5. Use `SaveableField` attributes for data that needs to be saved with the quest
+6. Consider quest dependencies by activating entries sequentially
+7. Use appropriate quest states to manage the quest lifecycle 

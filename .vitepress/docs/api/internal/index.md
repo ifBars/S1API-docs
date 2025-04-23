@@ -5,202 +5,164 @@ The Internal Utilities API provides low-level functionality for cross-compatibil
 ## Namespace
 
 ```csharp
-using S1API.Internal;
+using S1API.Internal.Utils;
 ```
 
 ## Key Classes
 
-### GameBridge
+### ButtonUtils
 
-The core bridge between Mono and Il2Cpp implementations.
+Provides utilities for working with Unity UI buttons, ensuring compatibility across different runtime environments.
 
 ```csharp
-public static class GameBridge
+public static class ButtonUtils
 {
-    public static bool IsIl2Cpp { get; }
-    public static RuntimeEnvironment Environment { get; }
-    
-    public static TResult InvokeGameMethod<TResult>(string typeName, string methodName, params object[] args);
-    public static void InvokeGameMethod(string typeName, string methodName, params object[] args);
-    public static object GetGameProperty(string typeName, string propertyName);
-    public static void SetGameProperty(string typeName, string propertyName, object value);
-    public static object GetGameField(string typeName, string fieldName);
-    public static void SetGameField(string typeName, string fieldName, object value);
-    public static object CreateGameInstance(string typeName, params object[] args);
+    public static void AddListener(Button button, Action action);
+    public static void RemoveListener(Button button, Action action);
+    public static void ClearListeners(Button button);
+    public static void Enable(Button button, Text label = null, string text = null);
+    public static void Disable(Button button, Text label = null, string text = null);
+    public static void SetLabel(Text label, string text);
+    public static void SetStyle(Button button, Text label, string text, Color bg);
 }
 ```
 
-### RuntimeEnvironment
+### ImageUtils
 
-Enum representing the current runtime environment.
+Provides utilities for loading and manipulating images in the game.
 
 ```csharp
-public enum RuntimeEnvironment
+public static class ImageUtils
 {
-    Mono,
-    Il2Cpp
+    public static Sprite LoadImage(string fileName);
 }
 ```
 
-### TypeMapper
+### RandomUtils
 
-Handles the mapping of types between Mono and Il2Cpp environments.
+A utility class providing random selection functionality for lists and numeric ranges.
 
 ```csharp
-public static class TypeMapper
+public static class RandomUtils
 {
-    public static Type MapType(string typeName);
-    public static MethodInfo MapMethod(Type type, string methodName, Type[] parameterTypes = null);
-    public static PropertyInfo MapProperty(Type type, string propertyName);
-    public static FieldInfo MapField(Type type, string fieldName);
-    public static bool TryMapType(string typeName, out Type type);
+    public static T PickOne<T>(this IList<T> list);
+    public static T PickUnique<T>(this IList<T> list, Func<T, bool> isDuplicate, int maxTries = 10);
+    public static List<T> PickMany<T>(this IList<T> list, int count);
+    public static int RangeInt(int minInclusive, int maxExclusive);
 }
 ```
 
-### GameObjectWrapper
+### CrossType
 
-A wrapper for game objects to provide consistent behavior across runtimes.
+Provides cross-compatibility methods to assist between Mono and Il2Cpp runtime environments.
 
 ```csharp
-public class GameObjectWrapper
+internal static class CrossType
 {
-    public object UnderlyingObject { get; }
-    
-    public GameObjectWrapper(object gameObject);
-    public GameObjectWrapper(string typeName, params object[] constructorArgs);
-    
-    public TResult InvokeMethod<TResult>(string methodName, params object[] args);
-    public void InvokeMethod(string methodName, params object[] args);
-    public object GetProperty(string propertyName);
-    public void SetProperty(string propertyName, object value);
-    public object GetField(string fieldName);
-    public void SetField(string fieldName, object value);
+    internal static Type Of<T>();
+    internal static bool Is<T>(object obj, out T result);
+    internal static T As<T>(object obj);
 }
 ```
 
-### Logger
+### ReflectionUtils
 
-Provides consistent logging across both runtimes.
-
-```csharp
-public static class Logger
-{
-    public static void Debug(string message);
-    public static void Info(string message);
-    public static void Warning(string message);
-    public static void Error(string message);
-    public static void Exception(Exception ex, string context = null);
-    
-    public static void SetLogLevel(LogLevel level);
-    public static void SetLogPrefix(string prefix);
-}
-```
-
-### LogLevel
-
-Enum representing different logging levels.
+Provides generic reflection-based methods for easier API development.
 
 ```csharp
-public enum LogLevel
+internal static class ReflectionUtils
 {
-    Debug,
-    Info,
-    Warning,
-    Error,
-    None
+    internal static List<Type> GetDerivedClasses<TBaseClass>();
+    internal static Type? GetTypeByName(string typeName);
+    internal static FieldInfo[] GetAllFields(Type? type, BindingFlags bindingFlags);
+    public static MethodInfo? GetMethod(Type? type, string methodName, BindingFlags bindingFlags);
 }
 ```
 
 ## Usage Examples
 
-### Accessing Game Functionality
+### Working with Buttons
 
 ```csharp
-// Check runtime environment
-if (GameBridge.IsIl2Cpp)
-{
-    Logger.Info("Running in Il2Cpp mode");
-}
-else
-{
-    Logger.Info("Running in Mono mode");
-}
+// Add a click listener to a button
+Button myButton = someGameObject.GetComponent<Button>();
+ButtonUtils.AddListener(myButton, () => {
+    // Your button click handling code here
+    Debug.Log("Button was clicked!");
+});
 
-// Invoke a game method
-int playerLevel = GameBridge.InvokeGameMethod<int>("PlayerStats", "GetLevel");
+// Enable/disable a button with label
+Text buttonLabel = myButton.GetComponentInChildren<Text>();
+ButtonUtils.Disable(myButton, buttonLabel, "Currently Unavailable");
 
-// Set a game property
-GameBridge.SetGameProperty("GameSettings", "DifficultyLevel", 2);
-
-// Create a game instance
-var inventory = GameBridge.CreateGameInstance("Inventory", 100); // capacity parameter
+// Later, re-enable the button
+ButtonUtils.Enable(myButton, buttonLabel, "Click Me!");
 ```
 
-### Working with Game Objects
+### Loading Images
 
 ```csharp
-// Create a wrapper for an existing game object
-var playerWrapper = new GameObjectWrapper(GameBridge.GetGameProperty("GameManager", "CurrentPlayer"));
-
-// Access properties and methods safely
-string playerName = playerWrapper.GetProperty("Name") as string;
-int playerHealth = (int)playerWrapper.GetProperty("Health");
-
-// Invoke methods
-playerWrapper.InvokeMethod("AddExperience", 100);
-```
-
-### Type Mapping
-
-```csharp
-// Get a mapped type
-Type itemType = TypeMapper.MapType("Item");
-
-// Check if a type exists and get it
-if (TypeMapper.TryMapType("QuestManager", out Type questManagerType))
+// Load an image file and convert it to a sprite
+Sprite iconSprite = ImageUtils.LoadImage("icons/myIcon.png");
+if (iconSprite != null)
 {
-    // Use the type...
-    MethodInfo completeQuestMethod = TypeMapper.MapMethod(
-        questManagerType, 
-        "CompleteQuest", 
-        new Type[] { typeof(string) }
-    );
-    
-    // Invoke the method using reflection
-    completeQuestMethod.Invoke(null, new object[] { "mainquest.001" });
+    // Use the sprite, for example:
+    someImage.sprite = iconSprite;
 }
 ```
 
-### Advanced Logging
+### Using Random Utilities
 
 ```csharp
-// Set up logging
-Logger.SetLogPrefix("[MyAwesomeMod]");
-Logger.SetLogLevel(LogLevel.Debug);
+// Get a random item from a list
+List<string> options = new List<string> { "Option A", "Option B", "Option C" };
+string randomOption = options.PickOne();
 
-// Log at different levels
-Logger.Debug("Detailed diagnostic information");
-Logger.Info("General information");
-Logger.Warning("Something might be wrong");
-Logger.Error("Something definitely went wrong");
+// Get multiple random items
+List<string> selectedOptions = options.PickMany(2);
 
-try
+// Get a random number in a range
+int randomValue = RandomUtils.RangeInt(1, 100);
+```
+
+### Cross-Type Compatibility
+
+```csharp
+// Get the type of a class that works in both Mono and IL2CPP
+Type playerType = CrossType.Of<PlayerController>();
+
+// Check if an object is of a specific type
+if (CrossType.Is<Inventory>(someObject, out var inventory))
 {
-    // Some risky operation
-    var result = GameBridge.InvokeGameMethod<int>("NonExistentClass", "NonExistentMethod");
+    // Use the inventory object safely
 }
-catch (Exception ex)
-{
-    Logger.Exception(ex, "Failed to invoke game method");
-}
+
+// Cast an object to a compatible type
+var character = CrossType.As<Character>(someGameObject);
+```
+
+### Using Reflection Utilities
+
+```csharp
+// Find all classes that derive from a base class
+List<Type> allItemTypes = ReflectionUtils.GetDerivedClasses<BaseItem>();
+
+// Find a type by its name
+Type itemType = ReflectionUtils.GetTypeByName("InventoryItem");
+
+// Get all fields from a type and its base types
+FieldInfo[] allFields = ReflectionUtils.GetAllFields(typeof(Player), 
+    BindingFlags.Instance | BindingFlags.NonPublic);
 ```
 
 ## Best Practices
 
-1. Only use the Internal utilities when other API modules don't provide the functionality you need
-2. Be aware that direct access to game methods may break with game updates
-3. Always check the runtime environment before using environment-specific code
-4. Use proper error handling when accessing game functionality
-5. Consider wrapping your use of Internal utilities in try-catch blocks
-6. Create extension methods or wrapper classes to encapsulate your use of Internal utilities 
-7. Be mindful of performance - accessing methods via reflection is slower than direct calls 
+1. **Cross-Platform Compatibility**: Always use the CrossType utilities when working with types that need to be compatible across Mono and IL2CPP builds.
+
+2. **Button Handlers**: Use ButtonUtils for managing button interactions instead of directly attaching listeners to ensure proper garbage collection and prevent memory leaks.
+
+3. **Image Loading**: When loading external images, use ImageUtils.LoadImage rather than implementing your own loading logic to ensure proper resource management.
+
+4. **Random Selection**: Use the RandomUtils extension methods for collections rather than implementing your own random selection logic to ensure better randomization and performance.
+
+5. **Reflection Usage**: Minimize the use of reflection in performance-critical code. When reflection is necessary, use the ReflectionUtils methods which are optimized for the game environment.

@@ -1,7 +1,7 @@
 <template>
   <section class="home-features">
     <div class="container">
-      <div class="section-heading">
+      <div class="section-heading" v-scroll-reveal>
         <h2 class="section-title">Key Features</h2>
         <p class="section-description">
           S1API provides a robust cross-compatibility layer between Mono and Il2Cpp with powerful capabilities
@@ -10,7 +10,7 @@
       
       <div class="features-grid">
         <!-- Row 1, Column 1 -->
-        <div class="feature-item">
+        <div class="feature-item" v-scroll-reveal="{ delay: 100 }">
           <a class="feature-card-link">
             <FeatureCard 
               title="Simplified API" 
@@ -25,7 +25,7 @@
         </div>
         
         <!-- Row 1, Column 2 -->
-        <div class="feature-item">
+        <div class="feature-item" v-scroll-reveal="{ delay: 200 }">
           <a class="feature-card-link">
             <FeatureCard 
               title="Cross-Platform Compatibility" 
@@ -40,7 +40,7 @@
         </div>
         
         <!-- Row 2, Column 1 -->
-        <div class="feature-item">
+        <div class="feature-item" v-scroll-reveal="{ delay: 300 }">
           <a class="feature-card-link">
             <FeatureCard 
               title="Data Persistence" 
@@ -55,7 +55,7 @@
         </div>
         
         <!-- Row 2, Column 2 -->
-        <div class="feature-item">
+        <div class="feature-item" v-scroll-reveal="{ delay: 400 }">
           <a class="feature-card-link">
             <FeatureCard 
               title="Game Element Access" 
@@ -75,6 +75,37 @@
 
 <script setup>
 import FeatureCard from './FeatureCard.vue'
+import { onMounted } from 'vue'
+
+// Scroll reveal directive
+const vScrollReveal = {
+  mounted(el, binding) {
+    const options = binding.value || {}
+    const delay = options.delay || 0
+    
+    el.style.opacity = '0'
+    el.style.transform = 'translateY(40px)'
+    el.style.transition = 'opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)'
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            el.style.opacity = '1'
+            el.style.transform = 'translateY(0)'
+          }, delay)
+          observer.unobserve(el)
+        }
+      })
+    }, { threshold: 0.1 })
+    
+    observer.observe(el)
+  }
+}
+
+onMounted(() => {
+  // Initialize any additional JS behaviors if needed
+})
 </script>
 
 <style scoped>
@@ -111,6 +142,17 @@ import FeatureCard from './FeatureCard.vue'
   position: relative;
   display: inline-block;
   line-height: 1.2;
+  background-size: 200% auto;
+  animation: gradient-shift 8s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .section-title::after {
@@ -119,10 +161,23 @@ import FeatureCard from './FeatureCard.vue'
   bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
+  width: 0;
   height: 4px;
   background: linear-gradient(90deg, var(--s1-c-primary) 0%, var(--s1-c-secondary) 100%);
   border-radius: 2px;
+  animation: line-expand 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes line-expand {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    width: 80px;
+    opacity: 1;
+  }
 }
 
 .section-description {
@@ -143,12 +198,14 @@ import FeatureCard from './FeatureCard.vue'
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
+  position: relative;
 }
 
 .feature-item {
   height: 100%;
   padding: 10px;
-  transition: transform 0.3s ease;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
 }
 
 .feature-card-link {
@@ -156,7 +213,7 @@ import FeatureCard from './FeatureCard.vue'
   height: 100%;
   text-decoration: none;
   color: inherit;
-  transition: var(--s1-transition-standard);
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .feature-card-link:hover {
@@ -165,12 +222,14 @@ import FeatureCard from './FeatureCard.vue'
 
 svg.icon {
   color: var(--s1-c-primary);
+  transition: all 0.3s ease;
 }
 
 @media (max-width: 768px) {
   .features-grid {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
+    gap: 40px;
   }
   
   .home-features {
