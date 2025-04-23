@@ -372,10 +372,11 @@
   transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease;
   z-index: 10;
   margin-left: 60px;
-  animation: float 6s ease-in-out infinite;
+  /* animation: float 6s ease-in-out infinite; */
 }
 
-@keyframes float {
+/* Removed float animation */
+/* @keyframes float {
   0% {
     transform: translateY(0px) rotate(0deg);
   }
@@ -385,10 +386,10 @@
   100% {
     transform: translateY(0px) rotate(0deg);
   }
-}
+} */
 
 .code-preview:hover {
-  transform: translateY(-5px) scale(1.02) rotate(1deg);
+  transform: translateY(-5px) scale(1.02) rotate(0deg);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 

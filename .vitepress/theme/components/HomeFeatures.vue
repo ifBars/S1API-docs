@@ -11,7 +11,7 @@
       <div class="features-grid">
         <!-- Row 1, Column 1 -->
         <div class="feature-item" v-scroll-reveal="{ delay: 100 }">
-          <a class="feature-card-link">
+          <a href="/S1API-docs/api/" class="feature-card-link">
             <FeatureCard 
               title="Simplified API" 
               description="Use a clean, consistent API that abstracts away the differences between backend implementations."
@@ -26,7 +26,7 @@
         
         <!-- Row 1, Column 2 -->
         <div class="feature-item" v-scroll-reveal="{ delay: 200 }">
-          <a class="feature-card-link">
+          <a href="/S1API-docs/guide/cross-compatibility.html" class="feature-card-link">
             <FeatureCard 
               title="Cross-Platform Compatibility" 
               description="Seamlessly run your code on both Mono and Il2Cpp backends without any modifications."
@@ -41,7 +41,7 @@
         
         <!-- Row 2, Column 1 -->
         <div class="feature-item" v-scroll-reveal="{ delay: 300 }">
-          <a class="feature-card-link">
+          <a href="/S1API-docs/api/save-system/" class="feature-card-link">
             <FeatureCard 
               title="Data Persistence" 
               description="Easy-to-use abstraction for save/load of class data regardless of backend implementation."
@@ -56,7 +56,7 @@
         
         <!-- Row 2, Column 2 -->
         <div class="feature-item" v-scroll-reveal="{ delay: 400 }">
-          <a class="feature-card-link">
+          <a href="/S1API-docs/api/dead-drops/" class="feature-card-link">
             <FeatureCard 
               title="Game Element Access" 
               description="Easily access and manipulate game objects, components, and resources regardless of the backend."

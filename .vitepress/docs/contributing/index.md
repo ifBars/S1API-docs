@@ -4,13 +4,23 @@ Welcome, potential contributor! We appreciate your interest in the S1API project
 
 ## Getting Started
 
-S1API is an open collaboration project aimed at standardizing Schedule One modding processes. We welcome contributions from developers of all skill levels.
+S1API is an open source collaboration project aimed at standardizing Schedule One modding processes. The goal is to provide a standard place for common functionalities so modders can focus on making content versus reverse engineering the game.
+
+## How to Build the Project
+
+Before contributing, you'll need to set up your development environment and learn how to build the project. Please refer to our detailed [Building the Project](/contributing/building) guide.
+
+## Proper Contributing Channels
+
+- **GitHub Issues**: For bug reports, feature requests, and general discussion
+- **Pull Requests**: For submitting your contributions
+- **Discord Server**: For real-time discussion and collaboration (link to be added)
 
 ## Contribution Process
 
 1. **Fork the Repository**: Start by forking the S1API repository to your GitHub account.
 
-2. **Set Up Development Environment**: Clone your fork to your local machine and set up the development environment according to the [Building the Project](/contributing/building) guide.
+2. **Set Up Development Environment**: Clone your fork to your local machine and set up the development environment.
 
 3. **Choose an Issue**: Look for open issues on the GitHub issue tracker, or propose a new feature or improvement.
 
@@ -26,14 +36,9 @@ S1API is an open collaboration project aimed at standardizing Schedule One moddi
 
 9. **Merge**: Once approved, your changes will be merged into the main codebase.
 
-## Communication Channels
+## Understanding the Coding Standards
 
-- **GitHub Issues**: For bug reports, feature requests, and general discussion
-- **Discord Server**: For real-time discussion and collaboration (link to be added)
-
-## Code of Conduct
-
-We expect all contributors to adhere to our code of conduct, which promotes a respectful and inclusive environment for everyone.
+Before contributing, please thoroughly read over our [Coding Standards](/contributing/coding-standards) documentation. These standards ensure the project remains consistent and predictable.
 
 ## Recognition
 
