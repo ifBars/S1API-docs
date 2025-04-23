@@ -32,10 +32,16 @@ If you're a mod developer who wants to use S1API in your mod, follow these steps
    - Create or open your mod project in your IDE.
    - Add the S1API DLL as a project reference:
      - In Visual Studio: Right-click "Dependencies" or "References" in your project → Add Reference → Browse → Select the S1API DLL.
+   - Ensure you reference the correct version:
+     - For IL2CPP games: Use `S1API.Il2Cpp.dll`
+     - For Mono games: Use `S1API.Mono.dll`
 
-3. **Set Requirements**
+3. **Set Up Build Configurations**
+   - Create IL2CPP and Mono build configurations in your project
+
+4. **Set Requirements**
    - In your mod's documentation, indicate that S1API is a requirement for users to run your mod.
 
-4. **Start Developing**
+5. **Start Developing**
    - You can now use the S1API classes and methods in your mod code.
    - Import the appropriate namespaces in your code files to access S1API functionality.

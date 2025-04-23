@@ -1,6 +1,6 @@
 # Items API
 
-The Items API provides functionality for creating, managing, and interacting with in-game items.
+The Items API provides functionality for working with in-game items, item definitions, and item instances.
 
 ## Namespace
 
@@ -10,183 +10,159 @@ using S1API.Items;
 
 ## Key Classes
 
-### Item
+### ItemDefinition
 
-Represents a single item in the game.
+Represents an item definition in-game. A definition describes "what" the item is, such as "This is a Soda".
 
 ```csharp
-public class Item : SaveableBase
+public class ItemDefinition : IGUIDReference
 {
-    public string ItemID { get; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public float Weight { get; set; }
-    public float Value { get; set; }
-    public Sprite Icon { get; set; }
-    public GameObject Model { get; set; }
-    public ItemType Type { get; set; }
-    public Dictionary<string, object> Properties { get; }
+    public string GUID { get; }
+    public string ID { get; }
+    public string Name { get; }
+    public string Description { get; }
+    public ItemCategory Category { get; }
+    public int StackLimit { get; }
     
-    public Item(string itemID, string name, string description);
-    
-    public bool CanUse();
-    public void Use();
-    public Item Clone();
-    public void SetProperty<T>(string key, T value);
-    public T GetProperty<T>(string key, T defaultValue = default);
+    public virtual ItemInstance CreateInstance(int quantity = 1);
 }
 ```
 
-### ItemStack
+### ItemInstance
 
-Represents a stack of items with a quantity.
+Represents an item instance in the game. An instance is the item existing in the game world, such as "I have five sodas in my hand."
 
 ```csharp
-public class ItemStack : SaveableBase
+public class ItemInstance
 {
-    public Item Item { get; }
-    public int Quantity { get; set; }
-    public float TotalWeight { get; }
-    public float TotalValue { get; }
-    
-    public ItemStack(Item item, int quantity = 1);
-    
-    public ItemStack Split(int quantity);
-    public bool CanMerge(ItemStack other);
-    public void Merge(ItemStack other);
-    public bool CanUse();
-    public void Use();
+    public ItemDefinition Definition { get; }
 }
 ```
 
-### ItemType
+### ItemCategory
 
-Enum representing different types of items.
+Enum representing different categories of items.
 
 ```csharp
-public enum ItemType
+public enum ItemCategory
 {
-    General,
-    Weapon,
-    Armor,
+    Product,
+    Packaging,
+    Growing,
+    Tools,
+    Furniture,
+    Lighting,
+    Cash,
     Consumable,
-    Quest,
-    Key,
-    Material,
-    Tool,
-    Valuable,
-    Special
+    Equipment,
+    Ingredient,
+    Decoration,
+    Clothing
 }
 ```
 
 ### ItemManager
 
-Static class for managing all items in the game.
+Static class for managing items across the game.
 
 ```csharp
 public static class ItemManager
 {
-    public static void RegisterItem(Item itemTemplate);
-    public static void UnregisterItem(string itemID);
-    public static Item GetItemTemplate(string itemID);
-    public static bool TryGetItemTemplate(string itemID, out Item itemTemplate);
-    public static Item CreateItem(string itemID);
-    public static ItemStack CreateItemStack(string itemID, int quantity = 1);
-    public static List<Item> GetAllItems();
-    public static List<Item> GetItemsByType(ItemType type);
+    public static ItemDefinition GetItemDefinition(string itemID);
+}
+```
+
+### ItemSlotInstance
+
+Represents an item slot within the game. These are present within storage, the hot bar, etc.
+
+```csharp
+public class ItemSlotInstance
+{
+    public int Quantity { get; }
+    public ItemInstance? ItemInstance { get; }
+    
+    public void AddQuantity(int amount);
 }
 ```
 
 ## Usage Examples
 
-### Creating a Custom Item
+### Getting an Item Definition
 
 ```csharp
-// Create a new item template
-var medkit = new Item("mymod.medkit", "Advanced Medkit", "Fully restores health and cures ailments");
-medkit.Weight = 0.5f;
-medkit.Value = 150.0f;
-medkit.Type = ItemType.Consumable;
+// Get an item definition by its ID
+var sodaDefinition = ItemManager.GetItemDefinition("cuke");
 
-// Set custom properties
-medkit.SetProperty("healAmount", 100);
-medkit.SetProperty("curesPoison", true);
-medkit.SetProperty("cooldown", 30.0f);
-
-// Load and set the icon
-medkit.Icon = Resources.Load<Sprite>("MyMod/Icons/medkit_icon");
-
-// Register the item with the item manager
-ItemManager.RegisterItem(medkit);
+// Access properties of the definition
+Console.WriteLine($"Name: {sodaDefinition.Name}");
+Console.WriteLine($"Description: {sodaDefinition.Description}");
+Console.WriteLine($"Category: {sodaDefinition.Category}");
+Console.WriteLine($"Stack Limit: {sodaDefinition.StackLimit}");
 ```
 
-### Working with ItemStacks
+### Creating an Item Instance
 
 ```csharp
-// Create an item stack from a registered item
-var medkitStack = ItemManager.CreateItemStack("mymod.medkit", 3);
+// Get an item definition
+var cukeDefinition = ItemManager.GetItemDefinition("cuke");
 
-// Split the stack
-var splitStack = medkitStack.Split(1);
-Console.WriteLine($"Original stack: {medkitStack.Quantity}"); // 2
-Console.WriteLine($"Split stack: {splitStack.Quantity}"); // 1
-
-// Merge compatible stacks
-if (medkitStack.CanMerge(splitStack))
-{
-    medkitStack.Merge(splitStack);
-    Console.WriteLine($"Merged stack: {medkitStack.Quantity}"); // 3
-}
-
-// Use an item from the stack
-if (medkitStack.CanUse())
-{
-    medkitStack.Use(); // Automatically decrements quantity
-    Console.WriteLine($"After use: {medkitStack.Quantity}"); // 2
-}
+// Create an instance of the item with a quantity of 5
+var cukeInstance = cukeDefinition.CreateInstance(5);
 ```
 
-### Querying Items
+### Working with Item Slots
 
 ```csharp
-// Get all consumable items
-var consumables = ItemManager.GetItemsByType(ItemType.Consumable);
-foreach (var item in consumables)
+// Example: Working with an item slot
+public void AddItemToSlot(ItemSlotInstance slot, ItemDefinition itemDef, int quantity)
 {
-    Console.WriteLine($"{item.Name}: {item.Description}");
-}
-
-// Check if an item exists and get it
-if (ItemManager.TryGetItemTemplate("mymod.medkit", out var medkit))
-{
-    float healAmount = medkit.GetProperty<float>("healAmount", 0);
-    bool curesPoison = medkit.GetProperty<bool>("curesPoison", false);
-    
-    Console.WriteLine($"Medkit heals {healAmount} and cures poison: {curesPoison}");
+    // Check if slot is empty or contains the same item type
+    if (slot.ItemInstance == null || slot.ItemInstance.Definition.ID == itemDef.ID)
+    {
+        // Create a new instance if needed
+        if (slot.ItemInstance == null)
+        {
+            var instance = itemDef.CreateInstance(quantity);
+            // Code to add instance to slot would go here
+        }
+        else
+        {
+            // Add to existing quantity
+            slot.AddQuantity(quantity);
+        }
+    }
 }
 ```
 
-## Events
-
-The Items API provides events to hook into item-related actions:
+### Checking Item Categories
 
 ```csharp
-// Item creation
-ItemManager.OnItemCreated += (item) => { /* ... */ };
+// Get an item definition
+var itemDef = ItemManager.GetItemDefinition("cuke");
 
-// Item use
-ItemManager.OnItemUsed += (item, user) => { /* ... */ };
-
-// Item registration
-ItemManager.OnItemRegistered += (itemTemplate) => { /* ... */ };
-ItemManager.OnItemUnregistered += (itemID) => { /* ... */ };
+// Check item category
+if (itemDef.Category == ItemCategory.Consumable)
+{
+    // Handle consumable item
+    Console.WriteLine("This is a consumable item");
+}
+else if (itemDef.Category == ItemCategory.Tools)
+{
+    // Handle tool item
+    Console.WriteLine("This is a tool item");
+}
 ```
 
 ## Best Practices
 
-1. Always register item templates at mod startup
-2. Use unique, namespaced IDs for all items
-3. Consider performance when designing items with complex behaviors
-4. Keep item property keys consistent across related items
-5. Set reasonable weight and value properties based on game balance
-6. Implement proper usage logic in the CanUse and Use methods 
+1. Use the appropriate abstraction level when working with items:
+   - `ItemDefinition` for referencing item types/definitions
+   - `ItemInstance` for working with specific instances of items
+   - `ItemSlotInstance` for working with inventory slots
+
+2. When changing quantities in item slots, use the `AddQuantity` method
+
+3. Always check if an item instance exists before accessing its properties
+
+4. Use the item GUID or ID consistently when referencing items across your code 
