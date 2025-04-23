@@ -12,9 +12,8 @@ If you're a player who wants to use mods that require S1API, follow these steps:
 
 2. **Install S1API**
    - Download the latest S1API release ZIP file.
-   - Extract the ZIP file, which contains a `Plugins` folder, with the S1API DLL and folder.
-   - Drag the contents of the extracted `Plugins` folder into the `Plugins` folder in your Schedule One game directory.
-   - If prompted to replace files, select "Yes". This should only occur when updating.
+   - Drag the `Plugins` folder into your Schedule One game directory.
+   - If prompted to replace files, select "Yes". This should only occur when updating S1API.
 
 3. **Verify Installation**
    - Launch Schedule One.
@@ -29,19 +28,19 @@ If you're a mod developer who wants to use S1API in your mod, follow these steps
    - Install S1API following the steps in the "For Mod Users" section above.
 
 2. **Add S1API as a Reference**
-   - Create or open your mod project in your IDE.
-   - Add the S1API DLL as a project reference:
-     - In Visual Studio: Right-click "Dependencies" or "References" in your project → Add Reference → Browse → Select the S1API DLL.
-   - Ensure you reference the correct version:
-     - For IL2CPP games: Use `S1API.Il2Cpp.dll`
-     - For Mono games: Use `S1API.Mono.dll`
+   - Install the S1API NuGet package in your mod project:
+     - Using NuGet Package Manager: Search for "S1API" and install the latest version
+     - Using Package Manager Console: `Install-Package S1API`
+     - Using .NET CLI: `dotnet add package S1API`
+     - Using PackageReference: Add `<PackageReference Include="S1API" Version="1.2.3" />` to your project file
+   - The NuGet package automatically handles the correct references for both IL2CPP and Mono builds
 
-3. **Set Up Build Configurations**
-   - Create IL2CPP and Mono build configurations in your project
-
-4. **Set Requirements**
-   - In your mod's documentation, indicate that S1API is a requirement for users to run your mod.
-
-5. **Start Developing**
+   > **Important Warning:** Do not add the game's `Assembly-CSharp.dll` as a reference when using S1API. Referencing the game's assembly directly can cause conflicts and issues with your mod.
+   
+3. **Start Developing**
    - You can now use the S1API classes and methods in your mod code.
    - Import the appropriate namespaces in your code files to access S1API functionality.
+
+4. **Publishing Your Mod**
+   - When publishing your mod, always include S1API as a dependency in your documentation.
+   - Make it clear to users that they need to install S1API for your mod to function properly.

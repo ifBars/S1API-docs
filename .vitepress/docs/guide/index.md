@@ -39,5 +39,3 @@ S1API is designed to cover common use cases but has some limitations:
 ## Want to Contribute?
 
 This is a massive project with many different areas to specialize in. If you're interested in contributing, please refer to the [Contributing](/contributing/) page for guidance on code standards and the contribution process.
-
-Ready to get started? Head to the [Getting Started](/guide/getting-started) guide. 

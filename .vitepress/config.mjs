@@ -38,8 +38,8 @@ export default defineConfig({
           text: 'Introduction',
           items: [
             { text: 'What is S1API?', link: '/guide/' },
-            { text: 'Getting Started', link: '/guide/getting-started' },
-            { text: 'Installation', link: '/guide/installation' }
+            { text: 'Installation', link: '/guide/installation' },
+            { text: 'Getting Started', link: '/guide/getting-started' }
           ]
         },
         {
