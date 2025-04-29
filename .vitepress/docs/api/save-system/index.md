@@ -64,75 +64,41 @@ public abstract class Saveable : Registerable, ISaveable
 
 ## Usage Examples
 
-### Basic Save/Load Implementation
+### Using SaveableField in Quests and NPCs
+
+The SaveableField attribute works with Quest and NPC classes, automatically handling the saving and loading of marked fields:
 
 ```csharp
-// Create a class that extends Saveable
-public class MyModData : Saveable
+// Define a custom data class for your save data
+public class OrderData
 {
-    // Mark fields to be saved with the SaveableField attribute
-    [SaveableField("playerStats")]
-    private PlayerStats _playerStats = new PlayerStats();
-    
-    [SaveableField("unlockedItems")]
-    private List<string> _unlockedItems = new List<string>();
-    
-    // Optional: Override callbacks
-    public override void OnSaved()
+    public ProductDefinition? Product;
+    public int Amount;
+    public int Price;
+}
+
+// Use it in your Quest class
+public class MyFancyQuest : Quest
+{
+    // Mark the field to be automatically saved with the SaveableField attribute
+    [SaveableField("Order")] 
+    private OrderData _orderData = new OrderData();
+
+    public void SetOrderAmount(int amount)
     {
-        Console.WriteLine("Data has been saved!");
+        _orderData.Amount = amount;
     }
     
-    public override void OnLoaded()
+    public void SetOrderProduct(ProductDefinition product)
     {
-        Console.WriteLine($"Loaded {_unlockedItems.Count} unlocked items");
-        RefreshUI();
+        _orderData.Product = product;
+    }
+    
+    public void SetOrderPrice(int price)
+    {
+        _orderData.Price = price;
     }
 }
 ```
 
-### Handling Complex Objects
-
-```csharp
-public class ModConfig : Saveable
-{
-    [SaveableField("settings")]
-    private Dictionary<string, object> _settings = new Dictionary<string, object>();
-    
-    [SaveableField("playerProgress")]
-    private PlayerProgress _playerProgress = new PlayerProgress();
-    
-    // Provide helper methods to work with your data
-    public T GetSetting<T>(string key, T defaultValue = default)
-    {
-        if (_settings.TryGetValue(key, out var value) && value is T typedValue)
-            return typedValue;
-        return defaultValue;
-    }
-    
-    public void SetSetting<T>(string key, T value)
-    {
-        _settings[key] = value;
-    }
-}
-```
-
-### Cross-compatibility Support
-
-The save system is designed to work consistently across both Mono and Il2Cpp builds:
-
-```csharp
-// This code works the same way in both Mono and Il2Cpp builds
-public class MyQuestData : Saveable
-{
-    [SaveableField("questProgress")]
-    private Dictionary<string, int> _questProgress = new Dictionary<string, int>();
-    
-    // Method to update quest progress
-    public void UpdateQuestProgress(string questId, int progress)
-    {
-        _questProgress[questId] = progress;
-        // Data will be automatically saved through the Saveable system
-    }
-}
-```
+The SaveableField attribute is recognized during the save/load process for NPC and Quest objects, and the data is automatically persisted within the current save file.
