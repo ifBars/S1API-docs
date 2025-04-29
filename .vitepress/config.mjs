@@ -10,12 +10,14 @@ export default defineConfig({
   base: '/S1API-docs/',
   
   head: [
-    ['link', { rel: 'icon', href: '/logo.png' }],
+    ['link', { rel: 'shortcut icon', href: '/S1API-docs/logo.ico' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/S1API-docs/logo.png' }],
+    ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/S1API-docs/logo.png' }],
     ['meta', { name: 'theme-color', content: '#3a86ff' }],
     ['meta', { name: 'og:type', content: 'website' }],
     ['meta', { name: 'og:title', content: 'S1API' }],
     ['meta', { name: 'og:description', content: 'A Schedule One Mono / Il2Cpp Cross Compatibility Layer' }],
-    ['meta', { name: 'og:image', content: '/logo.png' }],
+    ['meta', { name: 'og:image', content: '/S1API-docs/logo.png' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'S1API' }],
     ['meta', { name: 'twitter:description', content: 'A Schedule One Mono / Il2Cpp Cross Compatibility Layer' }]
