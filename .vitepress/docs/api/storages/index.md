@@ -31,7 +31,7 @@ public class StorageInstance
 
 ### ItemSlotInstance
 
-Represents an item slot within the game. These are present within storage containers.
+Represents an item slot within the game. These are present within storage containers, the hot bar, etc.
 
 ```csharp
 public class ItemSlotInstance
@@ -51,6 +51,57 @@ Represents an item instance in the game.
 public class ItemInstance
 {
     public ItemDefinition Definition { get; }
+}
+```
+
+### ItemDefinition
+
+Represents an item definition in-game.
+
+```csharp
+public class ItemDefinition
+{
+    public string GUID { get; }
+    public string ID { get; }
+    public string Name { get; }
+    public string Description { get; }
+    public ItemCategory Category { get; }
+    public int StackLimit { get; }
+    
+    public ItemInstance CreateInstance(int quantity = 1);
+}
+```
+
+### ItemManager
+
+Provides access to managing items across the game.
+
+```csharp
+public static class ItemManager
+{
+    public static ItemDefinition GetItemDefinition(string itemID);
+}
+```
+
+### ItemCategory
+
+A list of item categories available in-game.
+
+```csharp
+public enum ItemCategory
+{
+    Product,
+    Packaging,
+    Growing,
+    Tools,
+    Furniture,
+    Lighting,
+    Cash,
+    Consumable,
+    Equipment,
+    Ingredient,
+    Decoration,
+    Clothing
 }
 ```
 
@@ -148,10 +199,27 @@ public int CountItemsInStorage(StorageInstance storage, string itemID)
 }
 ```
 
-## Best Practices
+### Finding Item Definitions
 
-1. Always check if an item can fit before adding it to a storage container
-2. Use the `AddQuantity` method with negative values to remove items from slots
-3. Check if a slot's `ItemInstance` is null before accessing it
-4. When working with storage containers, subscribe to the `OnOpened` and `OnClosed` events to handle UI updates
-5. Remember that storage slots can contain different item types, so check each item's definition when processing storage contents 
+```csharp
+// Get an item definition by ID
+public ItemDefinition GetItemByID(string itemID)
+{
+    return ItemManager.GetItemDefinition(itemID);
+}
+
+// Create a new instance of an item to add to storage
+public void CreateAndAddToStorage(StorageInstance storage, string itemID, int quantity)
+{
+    var itemDef = ItemManager.GetItemDefinition(itemID);
+    if (itemDef != null)
+    {
+        var itemInstance = itemDef.CreateInstance(quantity);
+        if (storage.CanItemFit(itemInstance, quantity))
+        {
+            storage.AddItem(itemInstance);
+            Console.WriteLine($"Added {quantity}x {itemDef.Name} to storage");
+        }
+    }
+}
+```

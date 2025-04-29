@@ -14,20 +14,6 @@ The main namespace contains the core functionality and entry points for the API.
 using S1API;
 ```
 
-### Saveables System
-
-The Saveables system provides base classes and interfaces for creating objects that can be saved and loaded as part of the game's save system.
-
-```csharp
-using S1API.Saveables;
-```
-
-#### Key Saveables Classes
-
-- `ISaveable` - The base interface for all saveable objects
-- `SaveableBase` - An abstract base class implementing common save/load functionality
-- `SaveableManager` - Manages registration and tracking of saveable objects
-
 ## Game Systems
 
 Modules for interacting with various game systems:
@@ -58,48 +44,12 @@ All API classes and methods are designed to work seamlessly across both Mono and
 
 S1API provides type-safe wrappers around game objects and functions, helping prevent common errors and making your code more robust.
 
-### Performance Considerations
-
-While S1API abstracts away many implementation details, it's designed to minimize performance overhead. However, for extremely performance-critical operations, you might want to consider direct access to game functions.
-
-## Usage Examples
+## Usage Example
 
 ### Accessing the API
 
 ```csharp
-// Basic API initialization
-var api = S1API.Instance;
+using S1API.Items;
 
-// Check if the game is running in Il2Cpp mode
-bool isIl2Cpp = S1API.IsIl2Cpp;
+var itemDef = ItemManager.GetItemDefinition("cuke");
 ```
-
-### Creating a Saveable Object
-
-```csharp
-public class MyModData : SaveableBase
-{
-    public string PlayerNickname { get; set; }
-    public int CustomScore { get; set; }
-    
-    // Override to save custom properties
-    public override void Save(SaveData saveData)
-    {
-        base.Save(saveData);
-        saveData.WriteValue("playerNickname", PlayerNickname);
-        saveData.WriteValue("customScore", CustomScore);
-    }
-    
-    // Override to load custom properties
-    public override void Load(SaveData saveData)
-    {
-        base.Load(saveData);
-        PlayerNickname = saveData.ReadValue<string>("playerNickname");
-        CustomScore = saveData.ReadValue<int>("customScore");
-    }
-} 
-```
-
-## Getting Started
-
-If you're new to S1API, we recommend starting with the Core section to understand the fundamental concepts, then exploring the specific game systems relevant to your mod development needs. 

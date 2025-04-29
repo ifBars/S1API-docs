@@ -79,28 +79,3 @@ cashInstance.AddQuantity(-25.0f); // Remove 25 from the balance
 // Set currency to a specific amount
 cashInstance.SetQuantity(200.0f); // Set to exactly 200
 ```
-
-### Working with Item Slots
-
-Cash can be stored in item slots just like other items:
-
-```csharp
-// Get a cash instance from an item slot
-ItemSlotInstance slot = /* get a slot from inventory */;
-if (slot.ItemInstance is CashInstance cashInSlot)
-{
-    // Now we can work with the cash instance
-    float currentAmount = slot.Quantity;
-    
-    // Add more cash to the slot
-    slot.AddQuantity(50);
-}
-```
-
-## Best Practices
-
-1. Always check if an ItemInstance is a CashInstance before casting
-2. Use the AddQuantity method to add or subtract from cash balances
-3. Remember that cash is treated as an item in the inventory system
-4. Cash follows the item stacking rules based on its stack limit
-5. The game represents cash as float values rather than decimal to maintain compatibility with the item system 

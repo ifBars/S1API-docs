@@ -1,6 +1,6 @@
 # Game Time API
 
-The Game Time API provides tools for working with and manipulating in-game time, including day/night cycles, seasons, and time-based events.
+The Game Time API provides tools for working with and manipulating in-game time.
 
 ## Namespace
 
@@ -10,249 +10,138 @@ using S1API.GameTime;
 
 ## Key Classes
 
-### GameClock
+### Day
 
-The main class for accessing and controlling the game's time system.
+Enum representing days of the week.
 
 ```csharp
-public static class GameClock
+public enum Day
 {
-    // Current time properties
-    public static int Hour { get; }
-    public static int Minute { get; }
-    public static int Day { get; }
-    public static int Month { get; }
-    public static int Year { get; }
-    public static Season CurrentSeason { get; }
-    public static WeatherType CurrentWeather { get; }
-    public static DayPhase CurrentDayPhase { get; }
-    public static bool IsNight { get; }
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday
+}
+```
+
+### GameDateTime
+
+Represents an in-game datetime (elapsed days and 24-hour time).
+
+```csharp
+public struct GameDateTime
+{
+    public int ElapsedDays;
+    public int Time;
     
-    // Time flow control
-    public static float TimeScale { get; set; }
-    public static bool IsPaused { get; }
+    // Constructors
+    public GameDateTime(int elapsedDays, int time);
+    public GameDateTime(int minSum);
     
     // Methods
-    public static void AdvanceTime(int hours = 0, int minutes = 0, int days = 0);
-    public static void PauseTime();
-    public static void ResumeTime();
-    public static float GetDayProgress(); // 0.0 to 1.0 representing progress through the day
-    public static TimeSpan GetTimeUntil(int hour, int minute);
-    public static void SetTime(int hour, int minute);
-    public static void SetDate(int day, int month, int year);
+    public int GetMinSum();
+    public GameDateTime AddMinutes(int minutes);
+    public string GetFormattedTime();
+    public bool IsNightTime();
+    public bool IsSameDay(GameDateTime other);
+    public bool IsSameTime(GameDateTime other);
+    public override string ToString();
     
-    // Formatted time strings
-    public static string GetTimeString(bool use24HourFormat = false);
-    public static string GetDateString(string format = "d MMM yyyy");
+    // Operators
+    public static GameDateTime operator +(GameDateTime a, GameDateTime b);
+    public static GameDateTime operator -(GameDateTime a, GameDateTime b);
+    public static bool operator >(GameDateTime a, GameDateTime b);
+    public static bool operator <(GameDateTime a, GameDateTime b);
 }
 ```
 
-### Season
+### TimeManager
 
-Enum representing seasons in the game.
-
-```csharp
-public enum Season
-{
-    Spring,
-    Summer,
-    Fall,
-    Winter
-}
-```
-
-### DayPhase
-
-Enum representing different phases of the day.
+Provides access to various time management functions in the game.
 
 ```csharp
-public enum DayPhase
+public static class TimeManager
 {
-    Dawn,
-    Morning,
-    Noon,
-    Afternoon,
-    Dusk,
-    Evening,
-    Midnight
-}
-```
-
-### WeatherType
-
-Enum representing different weather conditions.
-
-```csharp
-public enum WeatherType
-{
-    Clear,
-    Cloudy,
-    Rainy,
-    Stormy,
-    Foggy,
-    Snowy
-}
-```
-
-### TimeEvent
-
-A class for scheduling events at specific times.
-
-```csharp
-public class TimeEvent
-{
-    public string EventID { get; }
-    public string Description { get; set; }
-    public bool IsRecurring { get; set; }
-    public TimeSpan RecurrenceInterval { get; set; }
+    // Events
+    public static Action OnDayPass;
+    public static Action OnWeekPass;
+    public static Action OnSleepStart;
+    public static Action<int> OnSleepEnd;
     
-    public TimeEvent(string eventID, string description, DateTime triggerTime);
-    public TimeEvent(string eventID, string description, int hour, int minute, bool triggerToday = true);
+    // Properties
+    public static Day CurrentDay { get; }
+    public static int ElapsedDays { get; }
+    public static int CurrentTime { get; }
+    public static bool IsNight { get; }
+    public static bool IsEndOfDay { get; }
+    public static bool SleepInProgress { get; }
+    public static bool TimeOverridden { get; }
+    public static float NormalizedTime { get; }
+    public static float Playtime { get; }
     
-    public void SetRecurring(TimeSpan interval);
-    public void SetRecurringDaily(int hour, int minute);
-    public void SetRecurringWeekly(DayOfWeek day, int hour, int minute);
-    public void Cancel();
-}
-```
-
-### TimeEventManager
-
-Static class for managing time-based events.
-
-```csharp
-public static class TimeEventManager
-{
-    public static event Action<TimeEvent> OnEventTriggered;
-    
-    public static void RegisterEvent(TimeEvent timeEvent);
-    public static void UnregisterEvent(string eventID);
-    public static TimeEvent GetEvent(string eventID);
-    public static List<TimeEvent> GetUpcomingEvents(int maxCount = 10);
+    // Methods
+    public static void FastForwardToWakeTime();
+    public static void SetTime(int time24h, bool local = false);
+    public static void SetElapsedDays(int days);
+    public static string GetFormatted12HourTime();
+    public static bool IsCurrentTimeWithinRange(int startTime24h, int endTime24h);
+    public static int GetMinutesFrom24HourTime(int time24h);
+    public static int Get24HourTimeFromMinutes(int minutes);
 }
 ```
 
 ## Usage Examples
 
-### Basic Time Manipulation
+### Working with GameDateTime
 
 ```csharp
-// Get current time information
-int currentHour = GameClock.Hour;
-int currentMinute = GameClock.Minute;
-string timeString = GameClock.GetTimeString(); // e.g. "3:45 PM"
-string dateString = GameClock.GetDateString(); // e.g. "15 Jun 2025"
+// Create a new game date time (day 3, 2:30 PM)
+GameDateTime dateTime = new GameDateTime(3, 1430);
+
+// Add 60 minutes
+GameDateTime later = dateTime.AddMinutes(60);
+
+// Check if it's night time
+bool isNight = dateTime.IsNightTime();
+
+// Format the time
+string timeString = dateTime.GetFormattedTime(); // e.g., "2:30 PM"
+
+// Compare game date times
+bool sameDay = dateTime.IsSameDay(later);
+bool laterInTime = later > dateTime;
+```
+
+### Using TimeManager
+
+```csharp
+// Get current day and time information
+Day today = TimeManager.CurrentDay;
+int currentTime = TimeManager.CurrentTime;
+bool isNightTime = TimeManager.IsNight;
+float dayProgress = TimeManager.NormalizedTime; // 0.0 to 1.0
+
+// Format current time
+string timeString = TimeManager.GetFormatted12HourTime(); // e.g., "2:30 PM"
 
 // Check time conditions
-bool isNighttime = GameClock.IsNight;
-bool isWinter = GameClock.CurrentSeason == Season.Winter;
-bool isStormy = GameClock.CurrentWeather == WeatherType.Stormy;
-
-Console.WriteLine($"It's {timeString} on {dateString}");
-Console.WriteLine($"Current day phase: {GameClock.CurrentDayPhase}");
+bool isOpeningHours = TimeManager.IsCurrentTimeWithinRange(900, 1700); // 9 AM to 5 PM
 
 // Manipulate time
-GameClock.AdvanceTime(hours: 2, minutes: 30); // Advance 2.5 hours
-GameClock.SetTime(18, 0); // Set time to 6:00 PM
-```
+TimeManager.SetTime(1800); // Set to 6:00 PM
+TimeManager.SetElapsedDays(10); // Set to day 10
+TimeManager.FastForwardToWakeTime(); // Skip to 7 AM
 
-### Time Flow Control
-
-```csharp
-// Speed up time (2x normal speed)
-GameClock.TimeScale = 2.0f;
-
-// Pause time for a cutscene
-GameClock.PauseTime();
-
-// Resume normal time flow
-GameClock.ResumeTime();
-GameClock.TimeScale = 1.0f;
-
-// Skip to morning
-if (GameClock.IsNight)
-{
-    // Calculate hours until 7:00 AM
-    var hoursUntilMorning = GameClock.GetTimeUntil(7, 0).TotalHours;
-    GameClock.AdvanceTime(hours: (int)hoursUntilMorning);
-}
-```
-
-### Scheduling Time Events
-
-```csharp
-// Create a one-time event for shop closing
-var shopClosingEvent = new TimeEvent(
-    "mymod.shop_closing", 
-    "Local shop closes for the night", 
-    hour: 20, 
-    minute: 0,
-    triggerToday: true
-);
-
-// Register the event
-TimeEventManager.RegisterEvent(shopClosingEvent);
-
-// Create a recurring daily event for shop opening
-var shopOpeningEvent = new TimeEvent(
-    "mymod.shop_opening",
-    "Local shop opens for the day",
-    hour: 8,
-    minute: 0
-);
-shopOpeningEvent.SetRecurringDaily(8, 0);
-
-// Register the event
-TimeEventManager.RegisterEvent(shopOpeningEvent);
-
-// Listen for events
-TimeEventManager.OnEventTriggered += (timeEvent) => {
-    if (timeEvent.EventID == "mymod.shop_closing")
-    {
-        // Handle shop closing
-        CloseShop();
-        DisplayNotification("The shop has closed for the night!");
-    }
-    else if (timeEvent.EventID == "mymod.shop_opening")
-    {
-        // Handle shop opening
-        OpenShop();
-        DisplayNotification("The shop is now open!");
-    }
+// Subscribe to time events
+TimeManager.OnDayPass += () => {
+    // Handle new day starting
+    Console.WriteLine("A new day has begun!");
 };
 
-// Get upcoming events
-var upcomingEvents = TimeEventManager.GetUpcomingEvents(5);
-foreach (var evt in upcomingEvents)
-{
-    Console.WriteLine($"Upcoming: {evt.Description}");
-}
-```
-
-## Events
-
-The Game Time API provides events to hook into time changes:
-
-```csharp
-// Time changes
-GameClock.OnHourChanged += (oldHour, newHour) => { /* ... */ };
-GameClock.OnDayChanged += (oldDay, newDay) => { /* ... */ };
-GameClock.OnSeasonChanged += (oldSeason, newSeason) => { /* ... */ };
-
-// Day/night cycle
-GameClock.OnDayPhaseChanged += (oldPhase, newPhase) => { /* ... */ };
-GameClock.OnNightBegin += () => { /* ... */ };
-GameClock.OnDayBegin += () => { /* ... */ };
-
-// Weather changes
-GameClock.OnWeatherChanged += (oldWeather, newWeather) => { /* ... */ };
-```
-
-## Best Practices
-
-1. Use the GameClock for all time-related operations rather than implementing your own time system
-2. Consider performance when scheduling many recurring events
-3. Be mindful of time scale changes and how they affect gameplay
-4. Use time events for scheduling rather than continuously checking time conditions
-5. When advancing time, consider the impact on scheduled events and NPC schedules
-6. Use the day/night and season events to adjust your mod's behavior appropriately 
+TimeManager.OnSleepEnd += (minutesSlept) => {
+    Console.WriteLine($"Good morning! You slept for {minutesSlept/60} hours.");
+};
+``` 

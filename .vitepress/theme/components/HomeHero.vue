@@ -52,16 +52,20 @@
     <span class="token keyword">protected override string</span> LastName => <span class="token string">"Doe"</span>;
     <span class="token keyword">private bool</span> _hasIntroduced = <span class="token keyword">false</span>;
 
+    <span class="token keyword">public</span> <span class="token function">JohnDoe</span>() : <span class="token keyword">base</span>(<span class="token string">"johndoe"</span>, <span class="token string">"John"</span>, <span class="token string">"Doe"</span>)
+    {
+    }
+
     <span class="token keyword">protected override void</span> <span class="token function">OnInitialized</span>()
     {
-        <span class="token class-name">TimeManager</span>.OnDayPass += <span class="token function">OnDayPass</span>;
+        TimeManager.OnDayPass += <span class="token function">OnDayPass</span>;
     }
 
     <span class="token keyword">private void</span> <span class="token function">OnDayPass</span>()
     {
         <span class="token keyword">if</span> (!_hasIntroduced)
         {
-            <span class="token function">SendTextMessage</span>(<span class="token string">"Hello, I'm John!"</span>);
+            <span class="token function">SendTextMessage</span>(<span class="token string">"Hello, I'm John! Nice to meet you."</span>);
             _hasIntroduced = <span class="token keyword">true</span>;
         }
     }

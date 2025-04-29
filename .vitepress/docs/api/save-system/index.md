@@ -136,12 +136,3 @@ public class MyQuestData : Saveable
     }
 }
 ```
-
-## Best Practices
-
-1. Keep your saveable classes organized and focused on specific data domains
-2. Use appropriate serializable types for fields marked with SaveableField
-3. Implement versioning for your saved data to handle format changes
-4. Override OnSaved() and OnLoaded() for any custom logic needed during save/load operations
-5. Keep your save data minimal - only save what's needed to restore state
-6. Test both saving and loading thoroughly, including edge cases 

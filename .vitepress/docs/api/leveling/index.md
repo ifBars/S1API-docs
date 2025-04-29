@@ -83,9 +83,3 @@ switch (LevelManager.Rank)
         break;
 }
 ```
-
-## Best Practices
-
-1. Use rank information to gate content and provide a sense of progression
-2. Display clear feedback when players advance to a new rank
-3. Consider using rank to scale game elements like enemy difficulty or rewards 

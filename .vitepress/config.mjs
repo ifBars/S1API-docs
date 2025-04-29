@@ -15,7 +15,7 @@ export default defineConfig({
     ['meta', { name: 'og:type', content: 'website' }],
     ['meta', { name: 'og:title', content: 'S1API' }],
     ['meta', { name: 'og:description', content: 'A Schedule One Mono / Il2Cpp Cross Compatibility Layer' }],
-    ['meta', { name: 'og:image', content: '/og-image.png' }],
+    ['meta', { name: 'og:image', content: '/logo.png' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:title', content: 'S1API' }],
     ['meta', { name: 'twitter:description', content: 'A Schedule One Mono / Il2Cpp Cross Compatibility Layer' }]
@@ -108,6 +108,11 @@ export default defineConfig({
     outline: {
       level: 'deep',
       label: 'On this page'
+    },
+
+    editLink: {
+      pattern: 'https://github.com/ifBars/S1API-docs/edit/dev/.vitepress/docs/:path',
+      text: 'Help improve this page'
     },
     
     // i18n support (if needed in the future)

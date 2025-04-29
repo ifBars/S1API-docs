@@ -153,16 +153,3 @@ else if (itemDef.Category == ItemCategory.Tools)
     Console.WriteLine("This is a tool item");
 }
 ```
-
-## Best Practices
-
-1. Use the appropriate abstraction level when working with items:
-   - `ItemDefinition` for referencing item types/definitions
-   - `ItemInstance` for working with specific instances of items
-   - `ItemSlotInstance` for working with inventory slots
-
-2. When changing quantities in item slots, use the `AddQuantity` method
-
-3. Always check if an item instance exists before accessing its properties
-
-4. Use the item GUID or ID consistently when referencing items across your code 

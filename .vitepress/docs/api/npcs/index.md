@@ -182,12 +182,3 @@ private void DeclineQuest(string questId)
     // Quest rejection logic
 }
 ```
-
-## Implementation Notes
-
-The NPCs API is currently under development. Upcoming features include:
-- Full NPC management through the NPCManager class
-- Support for NPC instances, behaviors, and schedules
-- Advanced dialogue systems and relationship management
-
-Check for updates in future releases as more functionality is added to this API. 

@@ -155,14 +155,12 @@ FieldInfo[] allFields = ReflectionUtils.GetAllFields(typeof(Player),
     BindingFlags.Instance | BindingFlags.NonPublic);
 ```
 
-## Best Practices
+## Use Cases
 
-1. **Cross-Platform Compatibility**: Always use the CrossType utilities when working with types that need to be compatible across Mono and IL2CPP builds.
+1. **Button Handlers**: Use ButtonUtils for managing button interactions.
 
-2. **Button Handlers**: Use ButtonUtils for managing button interactions instead of directly attaching listeners to ensure proper garbage collection and prevent memory leaks.
+2. **Image Loading**: When loading external images, use ImageUtils.LoadImage rather than implementing your own loading logic.
 
-3. **Image Loading**: When loading external images, use ImageUtils.LoadImage rather than implementing your own loading logic to ensure proper resource management.
+3. **Random Selection**: Use the RandomUtils extension methods for collections rather than implementing your own random selection logic.
 
-4. **Random Selection**: Use the RandomUtils extension methods for collections rather than implementing your own random selection logic to ensure better randomization and performance.
-
-5. **Reflection Usage**: Minimize the use of reflection in performance-critical code. When reflection is necessary, use the ReflectionUtils methods which are optimized for the game environment.
+4. **Reflection Usage**: Minimize the use of reflection in performance-critical code. When reflection is necessary, use the ReflectionUtils methods.

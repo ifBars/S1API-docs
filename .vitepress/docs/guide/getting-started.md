@@ -8,7 +8,7 @@ Before starting with S1API, make sure you have:
 
 - A development environment set up for .netstandard2.1
 - Basic knowledge of C# programming
-- Visual Studio or another IDE that supports .NET development
+- Visual Studio or another IDE that supports .NET development (e.g. Rider)
 - Ownership of Schedule One on Steam
 - Followed the [Installation Guide](/guide/installation)
 
@@ -19,7 +19,6 @@ S1API is organized into logical namespaces that correspond to different game sys
 ```csharp
 // Core functionality
 using S1API;
-using S1API.Saveables;
 
 // Game systems
 using S1API.GameTime;     // Date/time manipulation
@@ -66,6 +65,11 @@ public class MyCustomNPC : NPC
     protected override string FirstName => "Custom";
     protected override string LastName => "NPC";
     protected override string ID => "my_custom_npc";
+
+    public MyCustomNPC() : base("my_custom_npc", "Custom", "NPC")
+    {
+      // NPC Constructor
+    }
     
     protected override void OnInitialized()
     {
@@ -86,16 +90,58 @@ using S1API.GameTime;
 
 // Subscribe to time-based events
 TimeManager.OnDayPass += OnNewDay;
-TimeManager.OnHourPass += OnHourChange;
+TimeManager.OnWeekPass += OnWeekStart;
+TimeManager.OnSleepStart += OnPlayerSleep;
+TimeManager.OnSleepEnd += OnPlayerWakeUp;
 
 private void OnNewDay()
 {
     // Logic that runs at the start of each day
 }
 
-private void OnHourChange()
+private void OnWeekStart()
 {
-    // Logic that runs every hour
+    // Logic that runs at the start of each week
+}
+
+private void OnPlayerSleep()
+{
+    // Logic that runs when player starts sleeping
+}
+
+private void OnPlayerWakeUp(int minutesSkipped)
+{
+    // Logic that runs when player wakes up
+    // minutesSkipped: total minutes passed during sleep
+}
+
+// Working with game time
+void TimeExamples()
+{
+    // Get current time information
+    Day today = TimeManager.CurrentDay;          // Current day (Monday, Tuesday, etc.)
+    int daysPassed = TimeManager.ElapsedDays;    // Total days elapsed in game
+    int currentTime = TimeManager.CurrentTime;   // Current time in 24h format (e.g., 1330)
+    string formatted = TimeManager.GetFormatted12HourTime(); // e.g., "1:30 PM"
+    
+    // Check time conditions
+    if (TimeManager.IsNight)
+    {
+        // Night-time specific logic
+    }
+    
+    if (TimeManager.IsCurrentTimeWithinRange(800, 1200))
+    {
+        // Logic for morning hours (8 AM to 12 PM)
+    }
+    
+    // Manipulate time
+    TimeManager.SetTime(1400);                   // Set time to 2:00 PM
+    TimeManager.FastForwardToWakeTime();         // Skip to morning (7:00 AM)
+    
+    // Create a GameDateTime for specific points in time
+    GameDateTime futureTime = new GameDateTime(daysPassed + 1, 900);  // Tomorrow at 9:00 AM
+    GameDateTime laterToday = new GameDateTime().AddMinutes(120);     // 2 hours from now
 }
 ```
 

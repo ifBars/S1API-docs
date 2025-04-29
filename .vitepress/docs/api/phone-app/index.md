@@ -119,12 +119,3 @@ public class MyMod : MelonMod
 1. Create a PNG file for your app icon (recommended size: 128x128 or 256x256)
 2. Save it in the UserData folder with the name matching your `IconFileName` property
 3. Transparent background is preferred for better visual integration
-
-## Best Practices
-
-1. Use the PhoneApp base class for all custom apps to ensure proper integration
-2. Place your app icon PNG files in the UserData directory with appropriate names
-3. Design UI that matches the game's visual style for a seamless experience
-4. Keep phone apps lightweight and focused on specific functionality
-5. Include clear feedback when actions are performed in your app
-6. Consider the phone screen size when designing your UI layout 

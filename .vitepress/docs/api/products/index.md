@@ -208,7 +208,3 @@ if (productDef != null)
     }
 }
 ```
-
-## Implementation Notes
-
-The S1API Products system is a wrapper around the game's internal product system. It provides a clean interface to work with products while handling the complexities of the underlying implementation. 

@@ -1,5 +1,9 @@
 # Mono vs Il2Cpp: Practical Differences for Modders
 
+::: tip Note
+While S1API abstracts away the differences between Mono and Il2Cpp, understanding these concepts provides valuable insight into what development without S1API would be like. This guide helps you appreciate how S1API simplifies modding by handling the complexities of both backends for you.
+:::
+
 This guide explains the key differences between Mono and Il2Cpp builds of Unity games, with a focus on modding using MelonLoader and S1API. It includes practical advice, code examples, and best practices to help you write mods that work on both platforms.
 
 ## What is Mono?

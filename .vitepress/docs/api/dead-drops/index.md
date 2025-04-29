@@ -105,11 +105,3 @@ if (deadDrop != null)
     // (See StorageInstance documentation for details)
 }
 ```
-
-## Best Practices
-
-1. Always check if a dead drop exists before attempting to access its properties
-2. For quest-related features, associate dead drops with quest objectives using their GUID
-3. When finding nearby dead drops, consider using a reasonable search radius to avoid performance issues
-4. Consider caching dead drop references that you'll use frequently instead of searching every time
-5. Use the storage system appropriately for adding or removing items from dead drops 
