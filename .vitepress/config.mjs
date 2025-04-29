@@ -10,17 +10,42 @@ export default defineConfig({
   base: '/S1API-docs/',
   
   head: [
+    // Favicon settings
     ['link', { rel: 'shortcut icon', href: '/S1API-docs/logo.ico' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/S1API-docs/logo.png' }],
     ['link', { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/S1API-docs/logo.png' }],
-    ['meta', { name: 'theme-color', content: '#3a86ff' }],
-    ['meta', { name: 'og:type', content: 'website' }],
-    ['meta', { name: 'og:title', content: 'S1API' }],
-    ['meta', { name: 'og:description', content: 'A Schedule One Mono / Il2Cpp Cross Compatibility Layer' }],
-    ['meta', { name: 'og:image', content: '/S1API-docs/logo.png' }],
+    
+    // Basic SEO
+    ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }],
+    ['meta', { name: 'description', content: 'A Schedule One Mono / Il2Cpp Cross Compatibility Layer for game modding' }],
+    ['meta', { name: 'keywords', content: 'S1API, Schedule One, game modding, Unity, Mono, Il2Cpp, compatibility layer' }],
+    ['meta', { name: 'author', content: 'S1API Team' }],
+    ['link', { rel: 'canonical', href: 'https://ifbars.github.io/S1API-docs/' }],
+    
+    // Theme and appearance
+    ['meta', { name: 'theme-color', content: '#0f172a' }],
+    
+    // Open Graph / Facebook
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:url', content: 'https://ifbars.github.io/S1API-docs/' }],
+    ['meta', { property: 'og:title', content: 'S1API - Mono/Il2Cpp Compatibility Layer' }],
+    ['meta', { property: 'og:description', content: 'A powerful cross-compatibility layer for Unity game modding across Mono and Il2Cpp backends' }],
+    ['meta', { property: 'og:image', content: 'https://ifbars.github.io/S1API-docs/logo.png' }],
+    ['meta', { property: 'og:image:alt', content: 'S1API Logo' }],
+    ['meta', { property: 'og:site_name', content: 'S1API Documentation' }],
+    
+    // Twitter
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
-    ['meta', { name: 'twitter:title', content: 'S1API' }],
-    ['meta', { name: 'twitter:description', content: 'A Schedule One Mono / Il2Cpp Cross Compatibility Layer' }]
+    ['meta', { name: 'twitter:url', content: 'https://ifbars.github.io/S1API-docs/' }],
+    ['meta', { name: 'twitter:title', content: 'S1API - Game Modding Compatibility Layer' }],
+    ['meta', { name: 'twitter:description', content: 'A Schedule One Mono / Il2Cpp Cross Compatibility Layer for Unity game modding' }],
+    ['meta', { name: 'twitter:image', content: 'https://ifbars.github.io/S1API-docs/logo.png' }],
+    ['meta', { name: 'twitter:image:alt', content: 'S1API Logo' }],
+    
+    // Apple specific
+    ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+    ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' }],
+    ['meta', { name: 'apple-mobile-web-app-title', content: 'S1API Docs' }]
   ],
   
   themeConfig: {
