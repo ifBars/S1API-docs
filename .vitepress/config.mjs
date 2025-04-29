@@ -56,6 +56,7 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/guide/' },
       { text: 'API Reference', link: '/api/' },
+      { text: 'Code Generator', link: '/code-generator/' },
       { text: 'Contributing', link: '/contributing/' }
     ],
 
@@ -110,6 +111,16 @@ export default defineConfig({
           items: [
             { text: 'Save/Load System', link: '/api/save-system/' },
             { text: 'Internal Utilities', link: '/api/internal/' }
+          ]
+        }
+      ],
+      '/code-generator/': [
+        {
+          text: 'Code Generator',
+          items: [
+            { text: 'Overview', link: '/code-generator/' },
+            { text: 'NPC Generator', link: '/code-generator/npc' },
+            { text: 'Quest Generator', link: '/code-generator/quest' }
           ]
         }
       ],
