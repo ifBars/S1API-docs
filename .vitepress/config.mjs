@@ -60,16 +60,22 @@ export default defineConfig({
         {
           text: 'Game Systems',
           items: [
+            { text: 'Console', link: '/api/console/' },
             { text: 'Dead Drops', link: '/api/dead-drops/' },
             { text: 'Game Time', link: '/api/game-time/' },
             { text: 'Items', link: '/api/items/' },
             { text: 'Leveling', link: '/api/leveling/' },
+            { text: 'Logging', link: '/api/logging/' },
+            { text: 'Map', link: '/api/map/' },
             { text: 'Money', link: '/api/money/' },
             { text: 'NPCs', link: '/api/npcs/' },
             { text: 'Phone App', link: '/api/phone-app/' },
+            { text: 'Phone Calls', link: '/api/phone-calls/' },
             { text: 'Products', link: '/api/products/' },
+            { text: 'Property', link: '/api/property/' },
             { text: 'Quests', link: '/api/quests/' },
-            { text: 'Storages', link: '/api/storages/' }
+            { text: 'Storages', link: '/api/storages/' },
+            { text: 'UI', link: '/api/ui/' }
           ]
         },
         {
@@ -85,6 +91,7 @@ export default defineConfig({
           text: 'Contributing',
           items: [
             { text: 'How to Contribute', link: '/contributing/' },
+            { text: 'VitePress Documentation Guide', link: '/contributing/vitepress-guide' },
             { text: 'Coding Standards', link: '/contributing/coding-standards' },
             { text: 'Building the Project', link: '/contributing/building' }
           ]

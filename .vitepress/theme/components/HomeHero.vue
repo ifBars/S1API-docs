@@ -51,14 +51,12 @@
     <span class="token keyword">protected override string</span> FirstName => <span class="token string">"John"</span>;
     <span class="token keyword">protected override string</span> LastName => <span class="token string">"Doe"</span>;
     <span class="token keyword">private bool</span> _hasIntroduced = <span class="token keyword">false</span>;
+    <span class="token keyword">private</span> <span class="token class-name">Log</span> _logger = <span class="token keyword">new</span> <span class="token class-name">Log</span>(<span class="token string">"JohnDoe"</span>);
 
     <span class="token keyword">public</span> <span class="token function">JohnDoe</span>() : <span class="token keyword">base</span>(<span class="token string">"johndoe"</span>, <span class="token string">"John"</span>, <span class="token string">"Doe"</span>)
     {
-    }
-
-    <span class="token keyword">protected override void</span> <span class="token function">OnInitialized</span>()
-    {
         TimeManager.OnDayPass += <span class="token function">OnDayPass</span>;
+        _logger.<span class="token function">Msg</span>(<span class="token string">"NPC Created"</span>);
     }
 
     <span class="token keyword">private void</span> <span class="token function">OnDayPass</span>()

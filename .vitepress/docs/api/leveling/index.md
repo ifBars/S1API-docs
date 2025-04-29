@@ -17,9 +17,6 @@ The main class for managing player rank.
 ```csharp
 public static class LevelManager
 {
-    /// <summary>
-    /// The current rank of the save file.
-    /// </summary>
     public static Rank Rank { get; }
 }
 ```

@@ -40,6 +40,6 @@ Before contributing, you'll need to set up your development environment and lear
 
 Before contributing, please thoroughly read over our [Coding Standards](/contributing/coding-standards) documentation. These standards ensure the project remains consistent and predictable.
 
-## Recognition
+## Documentation Guidelines
 
-All contributors will be recognized in the project documentation and release notes. Your contributions help make S1API better for the entire modding community! 
+We use VitePress for our documentation site. If you're contributing to the documentation, please refer to our [VitePress Documentation Guide](/contributing/vitepress-guide) to understand how to write and format content effectively.

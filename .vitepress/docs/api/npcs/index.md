@@ -5,31 +5,32 @@ The NPCs API provides tools for creating and managing non-player characters in t
 ## Namespace
 
 ```csharp
-using S1API.NPCs;
+using S1API.Entities;
+using S1API.Messaging;
 ```
 
-## Key Classes
+## Key Classes and Interfaces
 
 ### NPC
 
 Represents a non-player character in the game. This is an abstract class that should be derived from to create custom NPCs.
 
 ```csharp
-public abstract class NPC : Saveable
+public abstract class NPC : Saveable, IEntity, IHealth
 {
     protected readonly System.Collections.Generic.List<Response> Responses;
     
-    // Optional custom mugshot icon sprite
-    protected virtual Sprite? NPCIcon => null;
-    
     // Base constructor for a new NPC
-    public NPC(string guid, string firstName, string lastName);
+    protected NPC(string id, string firstName, string lastName, Sprite icon = null);
     
     // Sends a text message from this NPC to the players
     public void SendTextMessage(string message, Response[]? responses = null, float responseDelay = 1f, bool network = true);
     
     // Called when a response is loaded from the save file
     protected virtual void OnResponseLoaded(Response response);
+    
+    // Static method to get an instance of an NPC
+    public static NPC? Get<T>();
 }
 ```
 
@@ -54,26 +55,208 @@ public class Response
 }
 ```
 
-### NPCManager
+### IEntity Interface
 
-Static class for managing all NPCs in the game.
+The NPC class implements the IEntity interface which provides basic entity functionality.
 
 ```csharp
-public class NPCManager
+public interface IEntity
 {
-    // Currently in development
+    // The GameObject associated with this entity
+    GameObject gameObject { get; }
+    
+    // The world position of the entity
+    Vector3 Position { get; set; }
+    
+    // The scale of the entity
+    float Scale { get; set; }
 }
 ```
 
-### NPCInstance
+### IHealth Interface
 
-Represents an instance of an NPC in the game.
+The NPC class implements the IHealth interface which provides health-related functionality.
 
 ```csharp
-public class NPCInstance
+public interface IHealth
 {
-    // Currently in development
+    // The current health of the entity
+    float CurrentHealth { get; }
+    
+    // The max health of the entity
+    float MaxHealth { get; set; }
+    
+    // Whether the entity is dead or not
+    bool IsDead { get; }
+    
+    // Whether the entity is invincible
+    bool IsInvincible { get; set; }
+    
+    // Revives the entity
+    void Revive();
+    
+    // Deals damage to the entity
+    void Damage(int amount);
+    
+    // Heals the entity
+    void Heal(int amount);
+    
+    // Kills the entity
+    void Kill();
+    
+    // Called when entity's health is less than or equal to 0
+    event Action OnDeath;
 }
+```
+
+## NPC Properties
+
+### Basic Properties
+
+```csharp
+// The world position of the NPC
+public Vector3 Position { get; set; }
+
+// The transform of the NPC (read-only)
+public Transform Transform { get; }
+
+// The first name of this NPC
+public string FirstName { get; set; }
+
+// The last name of this NPC
+public string LastName { get; set; }
+
+// The full name of this NPC (read-only)
+public string FullName { get; }
+
+// The unique identifier of this NPC
+public string ID { get; protected set; }
+
+// The icon assigned to this NPC
+public Sprite Icon { get; set; }
+
+// The scale of the NPC
+public float Scale { get; set; }
+```
+
+### State Properties
+
+```csharp
+// Whether the NPC is currently conscious
+public bool IsConscious { get; }
+
+// Whether the NPC is currently inside a building
+public bool IsInBuilding { get; }
+
+// Whether the NPC is currently inside a vehicle
+public bool IsInVehicle { get; }
+
+// Whether the NPC is currently panicking
+public bool IsPanicking { get; }
+
+// Whether the NPC is currently unsettled
+public bool IsUnsettled { get; }
+
+// Whether the NPC is currently visible to the player
+public bool IsVisible { get; }
+
+// Whether the NPC is knocked out
+public bool IsKnockedOut { get; }
+
+// How aggressive this NPC is towards others
+public float Aggressiveness { get; set; }
+
+// The region the NPC is associated with
+public Region Region { get; }
+
+// How long the NPC will panic for
+public float PanicDuration { get; set; }
+
+// Whether the NPC requires the region unlocked to deal with
+public bool RequiresRegionUnlocked { get; set; }
+```
+
+### Health Properties
+
+```csharp
+// The current health the NPC has
+public float CurrentHealth { get; }
+
+// The maximum health the NPC has
+public float MaxHealth { get; set; }
+
+// Whether the NPC is dead or not
+public bool IsDead { get; }
+
+// Whether the NPC is invincible or not
+public bool IsInvincible { get; set; }
+```
+
+## NPC Methods
+
+### Movement and State Methods
+
+```csharp
+// Causes the NPC to become unsettled
+public void Unsettle(float duration);
+
+// Smoothly scales the NPC over time
+public void LerpScale(float scale, float lerpTime);
+
+// Causes the NPC to become panicked
+public void Panic();
+
+// Causes the NPC to stop panicking
+public void StopPanicking();
+
+// Knocks the NPC out
+public void KnockOut();
+
+// Tells the NPC to travel to a specific position
+public void Goto(Vector3 position);
+```
+
+### Health Methods
+
+```csharp
+// Revives the NPC
+public void Revive();
+
+// Deals damage to the NPC
+public void Damage(int amount);
+
+// Heals the NPC
+public void Heal(int amount);
+
+// Kills the NPC
+public void Kill();
+```
+
+### Communication Methods
+
+```csharp
+// Sends a text message from this NPC to the players
+public void SendTextMessage(string message, Response[]? responses = null, float responseDelay = 1f, bool network = true);
+```
+
+## Events
+
+```csharp
+// Called when the NPC died
+public event Action OnDeath;
+
+// Called when the NPC's inventory contents change
+public event Action OnInventoryChanged;
+```
+
+## Static Members
+
+```csharp
+// List of all NPCs within the base game and modded
+public static readonly System.Collections.Generic.List<NPC> All;
+
+// Gets the instance of an NPC
+public static NPC? Get<T>();
 ```
 
 ## Usage Examples
@@ -83,102 +266,71 @@ public class NPCInstance
 To create a custom NPC, derive from the abstract NPC class:
 
 ```csharp
-using S1API.NPCs;
+using S1API.Entities;
+using S1API.Messaging;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopkeeperNPC : NPC
+public class CustomerNPC : NPC
 {
-    // Override this for a custom icon
-    protected override Sprite? NPCIcon => ImageUtils.LoadImage("shopkeeper_icon.png");
+    // Track customer preferences and state
+    private Dictionary<string, int> _cart = new Dictionary<string, int>();
+    private float _budget;
+    private bool _hasPurchased = false;
+    private int _lastMessageDay = -1;
     
-    // Create your NPC with a unique ID and name
-    public ShopkeeperNPC() : base("mymod.shopkeeper", "Marcus", "Merchant")
+    // Create the customer NPC with a unique ID and name
+    public CustomerNPC() : base("s1api_customer", "S1API", "Customer")
     {
-        // Setup is done in your constructor
+        // Initialize customer properties
+        IsInvincible = true;
+        Aggressiveness = 0.0f;
+        Scale = 1.0f;
+        _budget = UnityEngine.Random.Range(400f, 2000f);
+        
+        // Subscribe to the day passing event
+        GameEvents.OnDayPass += HandleDayPass;
     }
     
-    // Override this to handle responses loaded from a save file
+    // Handle when a day passes in the game
+    private void HandleDayPass(int newDay)
+    {
+        // Only send a message if we haven't sent one today
+        if (newDay != _lastMessageDay)
+        {
+            _lastMessageDay = newDay;
+            SendDailyMessage();
+        }
+    }
+    
+    // Send a daily message to the player
+    private void SendDailyMessage()
+    {
+        var responses = new[]
+        {
+            new Response { Label = "sellproduct", Text = "Okay bet.", OnTriggered = SellProduct },
+        };
+        
+        SendTextMessage($"Day {_lastMessageDay}: Hey! I'm looking to buy some product today. Got anything for ${_budget:F0}?", responses);
+    }
+    
+    // Override to handle responses loaded from save file
     protected override void OnResponseLoaded(Response response)
     {
         // Match responses by label and assign callbacks
-        if (response.Label == "buy_items")
+        switch(response.Label)
         {
-            response.OnTriggered = OpenShop;
-        }
-        else if (response.Label == "quest_info")
-        {
-            response.OnTriggered = GiveQuestInfo;
+            case "sellproduct":
+                response.OnTriggered = SellProduct;
+                break;
         }
     }
     
-    // Your custom methods
-    private void OpenShop()
+    private void SellProduct()
     {
-        // Implementation for opening shop
+        // In a real implementation, you have do something like send the player to a dropoff dead drop with a quest
+        _hasPurchased = true;
+        SendTextMessage("Thanks for the product! See you tomorrow maybe.");
     }
-    
-    private void GiveQuestInfo()
-    {
-        // Implementation for providing quest information
-    }
-    
-    // Example method to interact with the player
-    public void Greet()
-    {
-        // Create response options
-        var responses = new[]
-        {
-            new Response { Label = "buy_items", Text = "I'd like to see your wares.", OnTriggered = OpenShop },
-            new Response { Label = "quest_info", Text = "Tell me about that quest you mentioned.", OnTriggered = GiveQuestInfo },
-            new Response { Label = "goodbye", Text = "Goodbye.", OnTriggered = () => { /* Do nothing */ } }
-        };
-        
-        // Send a message with these response options
-        SendTextMessage("Hello traveler! What can I do for you today?", responses);
-    }
-}
-```
-
-### Using Text Messages and Responses
-
-```csharp
-// In your mod code:
-public void StartConversation()
-{
-    // Create a new instance of your custom NPC
-    var shopkeeper = new ShopkeeperNPC();
-    
-    // Start interaction
-    shopkeeper.Greet();
-    
-    // You can also send messages without responses
-    shopkeeper.SendTextMessage("Meet me at the town square at noon.");
-    
-    // Or create dynamic responses
-    var questResponses = new[]
-    {
-        new Response { 
-            Label = "accept_quest", 
-            Text = "I'll help you.", 
-            OnTriggered = () => AcceptQuest("village_defense") 
-        },
-        new Response { 
-            Label = "decline_quest", 
-            Text = "Not interested.", 
-            OnTriggered = () => DeclineQuest("village_defense") 
-        }
-    };
-    
-    shopkeeper.SendTextMessage("Our village needs your help. Will you defend us?", questResponses);
-}
-
-private void AcceptQuest(string questId)
-{
-    // Quest acceptance logic
-}
-
-private void DeclineQuest(string questId)
-{
-    // Quest rejection logic
 }
 ```

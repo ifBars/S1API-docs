@@ -12,7 +12,7 @@ using S1API.Products;
 
 ### ProductDefinition
 
-Represents the definition of a product in the game. Inherits from `ItemDefinition`.
+Represents a product definition in the game. Inherits from `ItemDefinition`.
 
 ```csharp
 public class ProductDefinition : ItemDefinition
@@ -20,6 +20,7 @@ public class ProductDefinition : ItemDefinition
     // INTERNAL properties and methods omitted
     
     public float Price { get; }
+    public Sprite Icon { get; }
     
     public override ItemInstance CreateInstance(int quantity = 1);
 }
@@ -89,7 +90,7 @@ public class CocaineDefinition : ProductDefinition
 
 ### PackagingDefinition
 
-Represents a type of packaging in the game. Inherits from `ItemDefinition`.
+Represents a type of packaging in-game. Inherits from `ItemDefinition`.
 
 ```csharp
 public class PackagingDefinition : ItemDefinition
@@ -102,12 +103,12 @@ public class PackagingDefinition : ItemDefinition
 
 ### ProductDefinitionWrapper
 
-Utility class for wrapping product definitions based on their specialized type.
+INTERNAL: A wrapper class for converting a product definition to its proper dedicated class.
 
 ```csharp
-public static class ProductDefinitionWrapper
+internal static class ProductDefinitionWrapper
 {
-    public static ProductDefinition Wrap(ProductDefinition def);
+    internal static ProductDefinition Wrap(ProductDefinition def);
 }
 ```
 
@@ -200,11 +201,7 @@ if (productDef != null)
     // Create an instance (e.g., to add to inventory)
     ProductInstance productInstance = (ProductInstance)productDef.CreateInstance(5); // Quantity of 5
     
-    // Check if product is packaged
-    if (productInstance.IsPackaged)
-    {
-        PackagingDefinition packaging = productInstance.AppliedPackaging;
-        Console.WriteLine($"Product is in packaging that can hold {packaging.Quantity} items");
-    }
+    // Access the icon for a product
+    Sprite productIcon = productDef.Icon;
 }
 ```

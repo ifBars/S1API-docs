@@ -10,6 +10,7 @@ Before you begin, make sure you have the following installed:
   - .NET desktop development
   - Game development with Unity
 - [.NET Standard 2.1 SDK](https://dotnet.microsoft.com/download/dotnet)
+- [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet)
 - [Git](https://git-scm.com/downloads) for version control
 - [MelonLoader](https://github.com/LavaGang/MelonLoader) installed for your Schedule One game installation
 
@@ -24,24 +25,23 @@ Before you begin, make sure you have the following installed:
 
 2. **Configure Build Properties**
 
-   The project uses build property files to specify paths to dependencies:
+   The project uses build property files to specify paths to dependencies. Example files are included in the repository:
    
-   - If building from the GitHub repository, `github.build.props` will be used
-   - For local development, create a `local.build.props` file in the root directory with paths to your game assemblies
+   - `github.build.props` - Used for GitHub CI/CD builds
+   - `example.build.props` - A template with examples of proper paths
 
-   Example `local.build.props`:
-   ```xml
-   <Project>
-       <PropertyGroup>
-           <MelonLoaderAssembliesPath>C:\Path\To\MelonLoader\MelonLoader\Managed</MelonLoaderAssembliesPath>
-           <MonoAssembliesPath>C:\Path\To\Schedule One\Mono\Managed</MonoAssembliesPath>
-           <Il2CppAssembliesPath>C:\Path\To\Schedule One\Il2Cpp\Managed</Il2CppAssembliesPath>
-           <AutomateLocalDeployment>true</AutomateLocalDeployment>
-           <LocalMonoDeploymentPath>C:\Path\To\Schedule One\Mono</LocalMonoDeploymentPath>
-           <LocalIl2CppDeploymentPath>C:\Path\To\Schedule One\Il2Cpp</LocalIl2CppDeploymentPath>
-       </PropertyGroup>
-   </Project>
-   ```
+   For local development, create a `local.build.props` file in the root directory by copying one of the example files and adjusting the paths to match your system. The file should contain paths to your game assemblies and MelonLoader installation.
+
+   Key properties to configure include:
+   - `AutomateLocalDeployment` - Set to `true` to automatically deploy builds to your game installation
+   - `MelonLoaderAssembliesPath` - Path to MelonLoader assemblies
+   - `BepInExAssembliesPath` - Path to BepInEx core files (if using BepInEx)
+   - `MonoAssembliesPath` - Path to game's managed assemblies for Mono builds
+   - `Il2CppAssembliesPath` - Path to game's Il2Cpp assemblies
+   - `LocalMonoDeploymentPath` - Path to your Mono version of the game
+   - `LocalIl2CppDeploymentPath` - Path to your Il2Cpp version of the game
+
+   Refer to the example files in the repository for the complete set of properties and proper formatting.
 
 3. **Open the Solution**
 
@@ -90,5 +90,5 @@ If the project includes tests:
 If you encounter issues while building the project, feel free to:
 
 1. Check the GitHub issues to see if it's a known problem
-2. Ask for help on the Discord server
+2. Ask for help in the Schedule 1 Modding Discord server
 3. Create a new issue with details about your problem 

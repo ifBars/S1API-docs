@@ -43,9 +43,15 @@ public static string GenerateString(int length) { ... }
 
 ```csharp
 /// <summary>
-/// Destroys all game objects in the world.
+/// Allows management of the level system.
 /// </summary>
-public void DestroyGameWorld() { ... }
+public static class LevelManager
+{
+    /// <summary>
+    /// The current rank of the save file.
+    /// </summary>
+    public static Rank Rank = (Rank)S1Levelling.LevelManager.Instance.Rank;
+}
 ```
 
 ## Conditional Build Compilation
