@@ -85,48 +85,6 @@ public static class QuestManager
 ### Creating a Custom Quest
 
 ```csharp
-// Create a custom quest class
-public class MyCustomQuest : Quest
-{
-    protected override string Title => "The Big Adventure";
-    protected override string Description => "Embark on an epic journey!";
-    
-    // Optional: Override the auto-begin behavior
-    protected override bool AutoBegin => false;
-    
-    // Optional: Custom quest icon
-    protected override Sprite? QuestIcon => ImageUtils.LoadImage("icon.png");
-    
-    private QuestEntry? findArtifactEntry;
-    private QuestEntry? defeatGuardianEntry;
-    
-    protected override void OnCreated()
-    {
-        // Add quest entries (objectives)
-        findArtifactEntry = AddEntry("Find the ancient artifact", new Vector3(100, 0, 200));
-        defeatGuardianEntry = AddEntry("Defeat the guardian", new Vector3(150, 0, 250));
-        
-        // Setup entry completion events
-        findArtifactEntry.OnComplete += OnArtifactFound;
-    }
-    
-    private void OnArtifactFound()
-    {
-        // Activate the next entry
-        defeatGuardianEntry?.SetState(QuestState.Active);
-    }
-}
-
-// Create an instance of the quest
-var quest = QuestManager.CreateQuest<MyCustomQuest>();
-
-// Begin the quest (if AutoBegin is false)
-quest.Begin();
-```
-
-### More Complex Example
-
-```csharp
 public class DeliveryQuest : Quest
 {
     protected override string Title => "Delivery Request";
