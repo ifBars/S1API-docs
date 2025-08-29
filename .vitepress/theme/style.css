@@ -242,6 +242,31 @@ body {
   max-width: 1080px !important;
 }
 
+/* Reduce spacing between sidebars and main docs content on wider screens */
+@media (min-width: 960px) {
+  .VPDoc .container {
+    gap: 6px !important;
+    column-gap: 6px !important;
+  }
+
+  /* Tighten the gutter next to the left sidebar */
+  .VPSidebar {
+    padding-right: 4px !important;
+  }
+
+  /* Tighten the gutter next to the right aside (table of contents) */
+  .VPDocAside {
+    padding-left: 4px !important;
+  }
+
+  /* Slightly reduce internal horizontal padding of the content area */
+  .VPDoc .content,
+  .VPDoc .content-container {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+}
+
 /* Button styling */
 .VPButton {
   border-radius: var(--s1-border-radius) !important;

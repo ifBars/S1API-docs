@@ -6,6 +6,9 @@ The Quests API provides tools for creating and managing custom quests in the gam
 
 ```csharp
 using S1API.Quests;
+using S1API.Quests.Constants;
+using UnityEngine;
+using System;
 ```
 
 ## Key Classes
@@ -20,7 +23,8 @@ public abstract class Quest : Saveable
     protected abstract string Title { get; }
     protected abstract string Description { get; }
     protected virtual bool AutoBegin => true;
-    protected readonly QuestEntry[] QuestEntries;
+    protected QuestState QuestState { get; }
+    protected readonly System.Collections.Generic.List<QuestEntry> QuestEntries;
     protected virtual Sprite? QuestIcon => null;
     
     public void Begin();
@@ -45,6 +49,7 @@ public class QuestEntry
     
     public string Title { get; set; }
     public Vector3 POIPosition { get; set; }
+    public QuestState State { get; }
     
     public void Begin();
     public void Complete();
@@ -68,6 +73,21 @@ public enum QuestState
 }
 ```
 
+### QuestAction
+
+Wrapper for quest actions used by the system.
+
+```csharp
+public enum QuestAction
+{
+    Begin,
+    Success,
+    Fail,
+    Expire,
+    Cancel
+}
+```
+
 ### QuestManager
 
 Static class for managing all quests in the game.
@@ -77,6 +97,8 @@ public static class QuestManager
 {
     public static Quest CreateQuest<T>(string? guid = null) where T : Quest;
     public static Quest CreateQuest(Type questType, string? guid = null);
+    public static Quest? GetQuestByGuid(string guid);
+    public static Quest? GetQuestByName(string questName);
 }
 ```
 

@@ -7,6 +7,7 @@ The NPCs API provides tools for creating and managing non-player characters in t
 ```csharp
 using S1API.Entities;
 using S1API.Messaging;
+using S1API.Vehicles;
 ```
 
 ## Key Classes and Interfaces
@@ -21,7 +22,7 @@ public abstract class NPC : Saveable, IEntity, IHealth
     protected readonly System.Collections.Generic.List<Response> Responses;
     
     // Base constructor for a new NPC
-    protected NPC(string id, string firstName, string lastName, Sprite icon = null);
+    protected NPC(string id, string? firstName, string? lastName, Sprite? icon = null);
     
     // Sends a text message from this NPC to the players
     public void SendTextMessage(string message, Response[]? responses = null, float responseDelay = 1f, bool network = true);
@@ -30,7 +31,7 @@ public abstract class NPC : Saveable, IEntity, IHealth
     protected virtual void OnResponseLoaded(Response response);
     
     // Static method to get an instance of an NPC
-    public static NPC? Get<T>();
+    public static NPC? Get<T>() where T : NPC;
 }
 ```
 
@@ -137,6 +138,9 @@ public Sprite Icon { get; set; }
 
 // The scale of the NPC
 public float Scale { get; set; }
+
+// The current NPCAppearance instance (read-only)
+public NPCAppearance Appearance { get; }
 ```
 
 ### State Properties
@@ -174,6 +178,9 @@ public float PanicDuration { get; set; }
 
 // Whether the NPC requires the region unlocked to deal with
 public bool RequiresRegionUnlocked { get; set; }
+
+// The current vehicle the NPC is occupying, if any
+public LandVehicle? CurrentVehicle { get; }
 ```
 
 ### Health Properties
@@ -237,6 +244,9 @@ public void Kill();
 ```csharp
 // Sends a text message from this NPC to the players
 public void SendTextMessage(string message, Response[]? responses = null, float responseDelay = 1f, bool network = true);
+
+// Sets whether the text message conversation can be deleted/hidden
+public bool ConversationCanBeHidden { get; set; }
 ```
 
 ## Events

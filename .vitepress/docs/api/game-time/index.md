@@ -66,10 +66,11 @@ Provides access to various time management functions in the game.
 public static class TimeManager
 {
     // Events
+    public static Action OnTick;
     public static Action OnDayPass;
     public static Action OnWeekPass;
     public static Action OnSleepStart;
-    public static Action<int> OnSleepEnd;
+    public static Action<int> OnSleepEnd; // parameter: total minutes skipped during sleep
     
     // Properties
     public static Day CurrentDay { get; }

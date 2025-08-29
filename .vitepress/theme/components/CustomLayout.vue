@@ -170,8 +170,8 @@ onMounted(() => {
   top: 64px;
   height: calc(100vh - 64px);
   overflow-y: auto;
-  padding-left: 24px;
-  padding-bottom: 48px;
+  padding-left: 12px;
+  padding-bottom: 24px;
 }
 
 @media (max-width: 960px) {
@@ -184,8 +184,8 @@ onMounted(() => {
   }
   
   .doc-wrap {
-    padding-top: 32px;
-    padding-bottom: 48px;
+    padding-top: 16px;
+    padding-bottom: 24px;
   }
 }
 

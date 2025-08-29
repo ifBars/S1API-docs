@@ -6,6 +6,8 @@ The Products API provides functionality for working with product items in the ga
 
 ```csharp
 using S1API.Products;
+using S1API.Items;
+using S1API.Properties;
 ```
 
 ## Key Classes
@@ -20,11 +22,18 @@ public class ProductDefinition : ItemDefinition
     // INTERNAL properties and methods omitted
     
     public float Price { get; }
+    public float BasePrice { get; }
+    public float MarketValue { get; }
     public Sprite Icon { get; }
+    public System.Collections.Generic.IReadOnlyList<PropertyBase> Properties { get; }
     
     public override ItemInstance CreateInstance(int quantity = 1);
 }
 ```
+
+Note: This class also exposes base-game drug typing information.
+- DrugTypes: runtime-specific list of `ScheduleOne.Product.DrugTypeContainer`
+- DrugType: `ScheduleOne.Product.EDrugType`
 
 ### ProductInstance
 
@@ -37,6 +46,9 @@ public class ProductInstance : ItemInstance
     
     public bool IsPackaged { get; }
     public PackagingDefinition AppliedPackaging { get; }
+    public Quality Quality { get; }
+    public ProductDefinition Definition { get; }
+    public System.Collections.Generic.IReadOnlyList<PropertyBase> Properties { get; }
 }
 ```
 
@@ -106,9 +118,24 @@ public class PackagingDefinition : ItemDefinition
 INTERNAL: A wrapper class for converting a product definition to its proper dedicated class.
 
 ```csharp
-internal static class ProductDefinitionWrapper
+public static class ProductDefinitionWrapper
 {
-    internal static ProductDefinition Wrap(ProductDefinition def);
+    public static ProductDefinition Wrap(ProductDefinition def);
+}
+```
+
+### Quality
+
+Represents quality tiers for product instances.
+
+```csharp
+public enum Quality
+{
+    Trash = 0,
+    Poor = 1,
+    Standard = 2,
+    Premium = 3,
+    Heavenly = 4
 }
 ```
 
@@ -172,7 +199,7 @@ ProductDefinition[] products = ProductManager.DiscoveredProducts;
 // Loop through products
 foreach (var product in products)
 {
-    Console.WriteLine($"Product: {product.Name}, Price: ${product.Price}");
+    Console.WriteLine($"Product: {product.Name}, Price: ${product.Price}, MV: ${product.MarketValue}");
     
     // Check for specific product types
     if (product is WeedDefinition weedProduct)
@@ -203,5 +230,11 @@ if (productDef != null)
     
     // Access the icon for a product
     Sprite productIcon = productDef.Icon;
+
+    // Inspect instance-specific data
+    var quality = productInstance.Quality; // Quality enum
+    var isPackaged = productInstance.IsPackaged;
+    var packaging = productInstance.AppliedPackaging;
+    var props = productInstance.Properties; // IReadOnlyList<PropertyBase>
 }
 ```
