@@ -1,5 +1,7 @@
 # S1API Documentation
 
+## THIS PROJECT IS DEPRECATED IN FAVOR OF THE DOCFX SITE BUILT INTO THE S1API REPO
+
 [![Build Status](https://github.com/ifBars/S1API-docs/actions/workflows/deploy.yml/badge.svg)](https://github.com/ifBars/S1API-docs/actions/workflows/deploy.yml)
 [![pages-build-deployment](https://github.com/ifBars/S1API-docs/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/ifBars/S1API-docs/actions/workflows/pages/pages-build-deployment)
 
